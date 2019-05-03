@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flare_flutter/flare_actor.dart';
 
 class CustomFab extends StatefulWidget {
   final List<Widget> buttons;
@@ -16,15 +15,15 @@ class CustomFab extends StatefulWidget {
     this.mainIconBack = const Icon(Icons.close),
     this.mainColor,
     this.heroTag,
-  }) {
-    assert(buttons != null);
-  }
+    Key key,
+  })  : assert(buttons != null),
+        super(key: key);
 
   @override
-  _CustomFabState createState() => _CustomFabState();
+  CustomFabState createState() => CustomFabState();
 }
 
-class _CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
+class CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
   AnimationController _controller;
 
   @override
@@ -34,12 +33,6 @@ class _CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
       duration: Duration(milliseconds: 200),
     );
     super.initState();
-  }
-
-  @override
-  void didUpdateWidget(CustomFab oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _controller.reverse();
   }
 
   @override
@@ -53,6 +46,14 @@ class _CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
       _controller.forward();
     else
       _controller.reverse();
+  }
+
+  void up() {
+    _controller.forward();
+  }
+
+  void down() {
+    _controller.reverse();
   }
 
   double _getSize(double t) {

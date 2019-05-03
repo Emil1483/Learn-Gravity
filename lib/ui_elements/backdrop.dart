@@ -23,13 +23,16 @@ class _BackdropPageState extends State<BackdropPage>
   AnimationController _controller;
 
   static const _PANEL_HEADER_HEIGHT = 64.0;
-  static const _PANEL_HEADER_PEAKING = 32.0;
+  static const _PANEL_HEADER_PEAKING = 0.0;
+
+  CustomFab customFab;
+  final _customFabKey = GlobalKey<CustomFabState>();
 
   @override
   void initState() {
     super.initState();
     _controller = new AnimationController(
-        duration: const Duration(milliseconds: 100), value: 1.0, vsync: this);
+        duration: const Duration(milliseconds: 100), value: 0.0, vsync: this);
   }
 
   @override
@@ -45,11 +48,17 @@ class _BackdropPageState extends State<BackdropPage>
   }
 
   void _panelUp() {
-    if (!_isPanelVisible) _controller.fling(velocity: 1.0);
+    if (!_isPanelVisible) {
+      _controller.fling(velocity: 1.0);
+      _customFabKey.currentState.down();
+    }
   }
 
   void _panelDown() {
-    if (_isPanelVisible) _controller.fling(velocity: -1.0);
+    if (_isPanelVisible) {
+      _controller.fling(velocity: -1.0);
+      _customFabKey.currentState.down();
+    }
   }
 
   Animation<RelativeRect> _getPanelAnimation(BoxConstraints constraints) {
@@ -66,7 +75,25 @@ class _BackdropPageState extends State<BackdropPage>
   }
 
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
-    _panelDown();
+    customFab = CustomFab(
+      key: _customFabKey,
+      mainColor: Theme.of(context).primaryColor,
+      buttons: <Widget>[
+        GravitySlider(rootNode: widget.rootNode),
+        ModeFab(rootNode: widget.rootNode),
+        FloatingActionButton(
+          heroTag: "resetButton",
+          backgroundColor: Theme.of(context).accentColor,
+          onPressed: widget.rootNode.reset,
+        ),
+        FloatingActionButton(
+          backgroundColor: Theme.of(context).accentColor,
+          heroTag: "infoButton",
+          onPressed: _panelUp,
+          child: Icon(Icons.info_outline),
+        ),
+      ],
+    );
 
     Widget base = Scaffold(
       backgroundColor: Colors.black,
@@ -78,24 +105,7 @@ class _BackdropPageState extends State<BackdropPage>
       ),
       floatingActionButton: Transform.translate(
         offset: Offset(0, -_PANEL_HEADER_PEAKING),
-        child: CustomFab(
-          mainColor: Theme.of(context).primaryColor,
-          buttons: <Widget>[
-            GravitySlider(rootNode: widget.rootNode),
-            ModeFab(rootNode: widget.rootNode),
-            FloatingActionButton(
-              heroTag: "resetButton",
-              backgroundColor: Theme.of(context).accentColor,
-              onPressed: widget.rootNode.reset,
-            ),
-            FloatingActionButton(
-              backgroundColor: Theme.of(context).accentColor,
-              heroTag: "infoButton",
-              onPressed: _panelUp,
-              child: Icon(Icons.info_outline),
-            ),
-          ],
-        ),
+        child: customFab,
       ),
     );
 
@@ -126,6 +136,7 @@ class _BackdropPageState extends State<BackdropPage>
 
   @override
   Widget build(BuildContext context) {
+    widget.rootNode.setOnTappedFunction(_panelDown);
     return LayoutBuilder(
       builder: _buildStack,
     );

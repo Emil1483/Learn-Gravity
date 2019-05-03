@@ -25,11 +25,13 @@ class RootNode extends NodeWithSize {
   bool _tickToastTimer = false;
   double _avgFps = 0;
   int _fpsSeen = 0;
+  Function onTapped;
 
-  //TODO: Get better icons
-  //TODO: Expand the about page to include learning material
-  //TODO: Add points with negative mass
-  //TODO: Make the info route part of a backdrop
+  //TODO: Improove the visuals by
+    // 1: Change the color style to a dark one
+    // 2: Get better icons
+  //TODO: Finish the "About Gravity" route
+  //TODO: Add the possibility to add points with negative mass
 
   RootNode({@required Size size}) : super(size) {
     assert(size != null);
@@ -38,6 +40,10 @@ class RootNode extends NodeWithSize {
     handleMultiplePointers = true;
 
     _addStarterPoints();
+  }
+
+  void setOnTappedFunction(Function f) {
+    onTapped = f;
   }
 
   void _addStarterPoints() {
@@ -157,6 +163,8 @@ class RootNode extends NodeWithSize {
     }
 
     _atract();
+
+    if (_pointersPos.length > 0 && onTapped != null) onTapped();
 
     if (mode == Modes.Gravity) {
       for (Map<String, dynamic> pointer in _pointersPos) {
