@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../ui_elements/custom_fab.dart';
-
 class AboutRoute extends StatelessWidget {
   final List<String> skills = [
     "Use an API",
@@ -62,45 +60,37 @@ class AboutRoute extends StatelessWidget {
       ),
     );
 
-    Widget text = Padding(
+    Widget text = ListView(
       padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          headline,
-          body,
-          bulletPoints,
-        ],
-      ),
+      children: <Widget>[
+        headline,
+        body,
+        bulletPoints,
+      ],
     );
 
-    Widget fab = Align(
-      alignment: Alignment.bottomRight,
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: CustomFab(
-          mainColor: Theme.of(context).accentColor,
-          buttons: <Widget>[
-            FloatingActionButton(
-              backgroundColor: Theme.of(context).primaryColor,
-              onPressed: () async {
-                final url = "mailto:emil14833@gmail.com";
-                if (await canLaunch(url))
-                  await launch(url);
-                else
-                  throw "Could not launch $url";
-              },
-              child: Icon(Icons.mail_outline),
-            ),
-          ],
+    Widget fab = Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: FloatingActionButton(
+          backgroundColor: Theme.of(context).accentColor,
+          onPressed: () async {
+            final url = "mailto:emil14833@gmail.com";
+            if (await canLaunch(url))
+              await launch(url);
+            else
+              throw "Could not launch $url";
+          },
+          child: Icon(Icons.mail_outline),
         ),
       ),
     );
 
     return Stack(
       children: <Widget>[
-        fab,
         text,
+        fab,
       ],
     );
   }

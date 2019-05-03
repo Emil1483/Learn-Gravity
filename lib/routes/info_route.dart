@@ -4,41 +4,34 @@ import './about_route.dart';
 import './learning_route.dart';
 
 class InfoRoute extends StatelessWidget {
+  final Function onBackPressed;
+
+  InfoRoute({@required this.onBackPressed}) : assert(onBackPressed != null);
+
   @override
   Widget build(BuildContext context) {
-    Widget appbar = AppBar(
-      backgroundColor: Theme.of(context).primaryColor,
-      title: Text(
-        "About",
-        style: TextStyle(color: Colors.white),
-      ),
-      bottom: TabBar(
-        indicatorColor: Theme.of(context).highlightColor,
-        tabs: <Widget>[
-          Tab(
-            icon: Icon(
-              Icons.info,
-              color: Colors.white,
-            ),
-          ),
-          Tab(
-            icon: Icon(
-              Icons.info_outline,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: appbar,
-        body: TabBarView(
+        body: Stack(
           children: <Widget>[
-            AboutRoute(),
-            LearningRoute(),
+            TabBarView(
+              children: <Widget>[
+                AboutRoute(),
+                LearningRoute(),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: FloatingActionButton(
+                  onPressed: onBackPressed,
+                  backgroundColor: Theme.of(context).accentColor,
+                  child: Icon(Icons.arrow_back),
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import './routes/home_route.dart';
-import './routes/info_route.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([]);
@@ -23,7 +22,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         "/": (context) => HomeRoute(),
-        "/info": (context) => InfoRoute(),
       },
     );
   }

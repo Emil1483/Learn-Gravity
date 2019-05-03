@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:spritewidget/spritewidget.dart';
+
+import '../nodes/rootNode.dart';
+import '../ui_elements/custom_fab.dart';
+import '../ui_elements/mode_fab.dart';
+import '../ui_elements/grav_slider.dart';
+import '../routes/info_route.dart';
 
 class BackdropPage extends StatefulWidget {
-  final Widget base;
-  final Widget content;
+  final RootNode rootNode;
 
   BackdropPage({
-    @required this.base,
-    @required this.content,
-  })  : assert(base != null),
-        assert(content != null);
+    @required this.rootNode,
+  }) : assert(rootNode != null);
 
   @override
   _BackdropPageState createState() => _BackdropPageState();
@@ -17,6 +21,9 @@ class BackdropPage extends StatefulWidget {
 class _BackdropPageState extends State<BackdropPage>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
+
+  static const _PANEL_HEADER_HEIGHT = 64.0;
+  static const _PANEL_HEADER_PEAKING = 32.0;
 
   @override
   void initState() {
@@ -37,12 +44,21 @@ class _BackdropPageState extends State<BackdropPage>
         status == AnimationStatus.forward;
   }
 
+  void _panelUp() {
+    if (!_isPanelVisible) _controller.fling(velocity: 1.0);
+  }
+
+  void _panelDown() {
+    if (_isPanelVisible) _controller.fling(velocity: -1.0);
+  }
+
   Animation<RelativeRect> _getPanelAnimation(BoxConstraints constraints) {
     final double top = constraints.biggest.height;
     final double bottom = 0;
     return RelativeRectTween(
-      begin: RelativeRect.fromLTRB(0.0, top, 0.0, bottom),
-      end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0),
+      begin:
+          RelativeRect.fromLTRB(0.0, top - _PANEL_HEADER_PEAKING, 0.0, bottom),
+      end: RelativeRect.fromLTRB(0.0, _PANEL_HEADER_HEIGHT, 0.0, 0.0),
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.linear,
@@ -50,13 +66,46 @@ class _BackdropPageState extends State<BackdropPage>
   }
 
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
+    _panelDown();
+
+    Widget base = Scaffold(
+      backgroundColor: Colors.black,
+      body: Builder(
+        builder: (BuildContext context) {
+          widget.rootNode.setContext(context);
+          return SpriteWidget(widget.rootNode);
+        },
+      ),
+      floatingActionButton: Transform.translate(
+        offset: Offset(0, -_PANEL_HEADER_PEAKING),
+        child: CustomFab(
+          mainColor: Theme.of(context).primaryColor,
+          buttons: <Widget>[
+            GravitySlider(rootNode: widget.rootNode),
+            ModeFab(rootNode: widget.rootNode),
+            FloatingActionButton(
+              heroTag: "resetButton",
+              backgroundColor: Theme.of(context).accentColor,
+              onPressed: widget.rootNode.reset,
+            ),
+            FloatingActionButton(
+              backgroundColor: Theme.of(context).accentColor,
+              heroTag: "infoButton",
+              onPressed: _panelUp,
+              child: Icon(Icons.info_outline),
+            ),
+          ],
+        ),
+      ),
+    );
+
     final ThemeData theme = Theme.of(context);
     final animation = _getPanelAnimation(constraints);
     return Container(
       color: theme.primaryColor,
       child: Stack(
         children: <Widget>[
-          widget.base,
+          base,
           PositionedTransition(
             rect: animation,
             child: Material(
@@ -64,8 +113,10 @@ class _BackdropPageState extends State<BackdropPage>
                 topLeft: Radius.circular(16.0),
                 topRight: Radius.circular(16.0),
               ),
-              elevation: 12.0,
-              child: widget.content,
+              child: Container(
+                margin: EdgeInsets.only(top: 16),
+                child: InfoRoute(onBackPressed: _panelDown),
+              ),
             ),
           ),
         ],
@@ -76,7 +127,7 @@ class _BackdropPageState extends State<BackdropPage>
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-        builder: _buildStack,
-      );
+      builder: _buildStack,
+    );
   }
 }
