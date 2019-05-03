@@ -5,6 +5,7 @@ import '../nodes/rootNode.dart';
 import '../ui_elements/custom_fab.dart';
 import '../ui_elements/mode_fab.dart';
 import '../ui_elements/grav_slider.dart';
+import '../ui_elements/backdrop.dart';
 
 class HomeRoute extends StatefulWidget {
   @override
@@ -22,7 +23,8 @@ class _HomeRouteState extends State<HomeRoute> {
   @override
   Widget build(BuildContext context) {
     _initRootNode(context);
-    return Scaffold(
+
+    Widget spriteWidgetContent = Scaffold(
       backgroundColor: Colors.black,
       body: Builder(
         builder: (BuildContext context) {
@@ -48,6 +50,11 @@ class _HomeRouteState extends State<HomeRoute> {
           ),
         ],
       ),
+    );
+
+    return BackdropPage(
+      base: spriteWidgetContent,
+      content: Center(child: Text("Hello")),
     );
   }
 }
