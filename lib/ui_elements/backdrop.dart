@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:spritewidget/spritewidget.dart';
 
 import '../nodes/rootNode.dart';
 import '../ui_elements/custom_fab.dart';
 import '../ui_elements/mode_fab.dart';
 import '../ui_elements/grav_slider.dart';
 import '../routes/info_route.dart';
+import '../routes/spritewidget_content.dart';
 
 class BackdropPage extends StatefulWidget {
   final RootNode rootNode;
@@ -27,6 +27,7 @@ class _BackdropPageState extends State<BackdropPage>
 
   CustomFab customFab;
   final _customFabKey = GlobalKey<CustomFabState>();
+  final _modeFabKey = GlobalKey<ModeFabState>();
 
   @override
   void initState() {
@@ -79,8 +80,12 @@ class _BackdropPageState extends State<BackdropPage>
       key: _customFabKey,
       mainColor: Theme.of(context).primaryColor,
       buttons: <Widget>[
-        GravitySlider(rootNode: widget.rootNode),
-        ModeFab(rootNode: widget.rootNode),
+        GravitySlider(
+          rootNode: widget.rootNode,
+        ),
+        ModeFab(
+          key: _modeFabKey,
+        ),
         FloatingActionButton(
           heroTag: "resetButton",
           backgroundColor: Theme.of(context).accentColor,
@@ -95,27 +100,17 @@ class _BackdropPageState extends State<BackdropPage>
       ],
     );
 
-    Widget base = Scaffold(
-      backgroundColor: Colors.black,
-      body: Builder(
-        builder: (BuildContext context) {
-          widget.rootNode.setContext(context);
-          return SpriteWidget(widget.rootNode);
-        },
-      ),
-      floatingActionButton: Transform.translate(
-        offset: Offset(0, -_PANEL_HEADER_PEAKING),
-        child: customFab,
-      ),
-    );
-
     final ThemeData theme = Theme.of(context);
     final animation = _getPanelAnimation(constraints);
+    widget.rootNode.setModeFabKey(_modeFabKey);
     return Container(
       color: theme.primaryColor,
       child: Stack(
         children: <Widget>[
-          base,
+          SpritewidgetContent(
+            rootNode: widget.rootNode,
+            customFab: customFab,
+          ),
           PositionedTransition(
             rect: animation,
             child: Material(

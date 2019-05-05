@@ -5,11 +5,11 @@ import 'package:spritewidget/spritewidget.dart';
 
 import './point.dart';
 import '../enums/modes.dart';
+import '../ui_elements/mode_fab.dart';
 
 class RootNode extends NodeWithSize {
   Modes mode = Modes.Nothing;
-
-  BuildContext context;
+  GlobalKey<ModeFabState> _modeFabKey;
 
   final double _pointsSpread = 30;
   final double _addPointDensity = 15;
@@ -27,6 +27,7 @@ class RootNode extends NodeWithSize {
   int _fpsSeen = 0;
   Function onTapped;
 
+  //TODO: Fix the "no spriteBox" bug
   //TODO: Improove the visuals by
     // 1: Change the color style to a dark one
     // 2: Get better icons
@@ -166,6 +167,8 @@ class RootNode extends NodeWithSize {
 
     if (_pointersPos.length > 0 && onTapped != null) onTapped();
 
+    mode = _modeFabKey.currentState.mode;
+
     if (mode == Modes.Gravity) {
       for (Map<String, dynamic> pointer in _pointersPos) {
         for (Node node in children) {
@@ -220,7 +223,10 @@ class RootNode extends NodeWithSize {
 
   void setMode(Modes newMode) {
     mode = newMode;
+    print("current mode is $mode");
   }
+
+  void setModeFabKey(GlobalKey<ModeFabState> key) => _modeFabKey = key;
 
   void reset() {
     children.clear();
@@ -228,8 +234,6 @@ class RootNode extends NodeWithSize {
   }
 
   void setGravity(double newG) => g = newG;
-
-  void setContext(BuildContext newContext) => context = newContext;
 
   double get gravity => g;
 
