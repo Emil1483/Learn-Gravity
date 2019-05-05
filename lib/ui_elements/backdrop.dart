@@ -6,14 +6,9 @@ import '../ui_elements/mode_fab.dart';
 import '../ui_elements/grav_slider.dart';
 import '../routes/info_route.dart';
 import '../routes/spritewidget_content.dart';
+import '../inheritedWidgets/inheritedRootNode.dart';
 
 class BackdropPage extends StatefulWidget {
-  final RootNode rootNode;
-
-  BackdropPage({
-    @required this.rootNode,
-  }) : assert(rootNode != null);
-
   @override
   _BackdropPageState createState() => _BackdropPageState();
 }
@@ -76,20 +71,20 @@ class _BackdropPageState extends State<BackdropPage>
   }
 
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
+    RootNode rootNode = InheritedRootNode.of(context).rootNode;
+
     customFab = CustomFab(
       key: _customFabKey,
       mainColor: Theme.of(context).primaryColor,
       buttons: <Widget>[
-        GravitySlider(
-          rootNode: widget.rootNode,
-        ),
+        GravitySlider(),
         ModeFab(
           key: _modeFabKey,
         ),
         FloatingActionButton(
           heroTag: "resetButton",
           backgroundColor: Theme.of(context).accentColor,
-          onPressed: widget.rootNode.reset,
+          onPressed: rootNode.reset,
         ),
         FloatingActionButton(
           backgroundColor: Theme.of(context).accentColor,
@@ -102,13 +97,12 @@ class _BackdropPageState extends State<BackdropPage>
 
     final ThemeData theme = Theme.of(context);
     final animation = _getPanelAnimation(constraints);
-    widget.rootNode.setModeFabKey(_modeFabKey);
+    rootNode.setModeFabKey(_modeFabKey);
     return Container(
       color: theme.primaryColor,
       child: Stack(
         children: <Widget>[
           SpritewidgetContent(
-            rootNode: widget.rootNode,
             customFab: customFab,
           ),
           PositionedTransition(
@@ -131,7 +125,7 @@ class _BackdropPageState extends State<BackdropPage>
 
   @override
   Widget build(BuildContext context) {
-    widget.rootNode.setOnTappedFunction(_panelDown);
+    InheritedRootNode.of(context).rootNode.setOnTappedFunction(_panelDown);
     return LayoutBuilder(
       builder: _buildStack,
     );

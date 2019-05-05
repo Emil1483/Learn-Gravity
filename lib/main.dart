@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import './routes/home_route.dart';
+import './inheritedWidgets/inheritedRootNode.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([]);
@@ -19,10 +20,9 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.orange[800],
         highlightColor: Colors.lightBlueAccent,
       ),
-      initialRoute: '/',
-      routes: {
-        "/": (context) => HomeRoute(),
-      },
+      home: InheritedRootNode(
+        child: HomeRoute(),
+      ),
     );
   }
 }

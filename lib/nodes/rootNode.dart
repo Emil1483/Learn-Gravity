@@ -27,15 +27,16 @@ class RootNode extends NodeWithSize {
   int _fpsSeen = 0;
   Function onTapped;
 
-  //TODO: Fix the "no spriteBox" bug
   //TODO: Improove the visuals by
-    // 1: Change the color style to a dark one
-    // 2: Get better icons
+  // 1: Change the color style to a dark one
+  // 2: Get better icons
   //TODO: Finish the "About Gravity" route
   //TODO: Add the possibility to add points with negative mass
 
   RootNode({@required Size size}) : super(size) {
     assert(size != null);
+    
+    print("new rootNode with: $size");
 
     userInteractionEnabled = true;
     handleMultiplePointers = true;
@@ -45,6 +46,11 @@ class RootNode extends NodeWithSize {
 
   void setOnTappedFunction(Function f) {
     onTapped = f;
+  }
+
+  void setSize(Size size) {
+    this.size = size;
+    reset();
   }
 
   void _addStarterPoints() {
@@ -146,6 +152,9 @@ class RootNode extends NodeWithSize {
       }
     }
   }
+
+  @override
+  SpriteBox get spriteBox => SpriteBox(this);
 
   @override
   void update(double dt) {
