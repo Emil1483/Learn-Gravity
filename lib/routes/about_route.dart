@@ -19,7 +19,7 @@ class AboutRoute extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       child: Text(
         "Why Does This App Exist?",
-        style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w300),
+        style: Theme.of(context).textTheme.title,
         textAlign: TextAlign.center,
       ),
     );
@@ -28,10 +28,7 @@ class AboutRoute extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 24.0),
       child: Text(
         "This app is the 2nd app of my portfolio; If you need a flutter developer, send me an email! My portfolio apps are proof that I can:",
-        style: TextStyle(
-          fontSize: 16.0,
-          color: Colors.grey.shade700,
-        ),
+        style: Theme.of(context).textTheme.subtitle,
         textAlign: TextAlign.center,
       ),
     );
@@ -44,16 +41,12 @@ class AboutRoute extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 5.0),
             margin: EdgeInsets.symmetric(vertical: 1.0),
             decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).accentColor,
                 borderRadius: BorderRadius.circular(4.0)),
             child: Text(
               skill,
               textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
+              style: Theme.of(context).textTheme.subhead,
             ),
           );
         }).toList(),

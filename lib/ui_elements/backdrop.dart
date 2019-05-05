@@ -98,28 +98,27 @@ class _BackdropPageState extends State<BackdropPage>
     final ThemeData theme = Theme.of(context);
     final animation = _getPanelAnimation(constraints);
     rootNode.setModeFabKey(_modeFabKey);
-    return Container(
-      color: theme.primaryColor,
-      child: Stack(
-        children: <Widget>[
-          SpritewidgetContent(
-            customFab: customFab,
-          ),
-          PositionedTransition(
-            rect: animation,
-            child: Material(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16.0),
-                topRight: Radius.circular(16.0),
-              ),
-              child: Container(
-                margin: EdgeInsets.only(top: 16),
-                child: InfoRoute(onBackPressed: _panelDown),
-              ),
+    return Stack(
+      children: <Widget>[
+        SpritewidgetContent(
+          customFab: customFab,
+        ),
+        PositionedTransition(
+          rect: animation,
+          child: Material(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16.0),
+              topRight: Radius.circular(16.0),
+            ),
+            color: theme.backgroundColor,
+            child: Container(
+              margin: EdgeInsets.only(top: 16),
+              color: theme.backgroundColor,
+              child: InfoRoute(onBackPressed: _panelDown),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
