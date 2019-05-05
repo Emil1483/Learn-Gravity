@@ -13,15 +13,15 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Gravity",
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        accentColor: Colors.orange[800],
-        highlightColor: Colors.lightBlueAccent,
-      ),
-      home: InheritedRootNode(
-        child: HomeRoute(),
+    return InheritedRootNode(
+      child: MaterialApp(
+        title: "Gravity",
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          accentColor: Colors.orange[800],
+          highlightColor: Colors.lightBlueAccent,
+        ),
+        home: HomeRoute(),
       ),
     );
   }

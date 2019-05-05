@@ -32,6 +32,7 @@ class RootNode extends NodeWithSize {
   // 2: Get better icons
   //TODO: Finish the "About Gravity" route
   //TODO: Add the possibility to add points with negative mass
+  //(Optional) TODO: Stop the rootnode from reseting after an orientaionchange
 
   RootNode({@required Size size}) : super(size) {
     assert(size != null);
