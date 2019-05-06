@@ -12,7 +12,6 @@ class ModeFab extends StatefulWidget {
 
 class ModeFabState extends State<ModeFab> {
   final List<List<dynamic>> _modes = <List>[
-    [Icon(Icons.border_outer), Modes.Nothing],
     [Icon(Icons.brightness_5), Modes.Gravity],
     [Icon(Icons.brightness_7), Modes.Repel],
     [Icon(Icons.bubble_chart), Modes.Add],
@@ -32,7 +31,12 @@ class ModeFabState extends State<ModeFab> {
       buttons: _modes.map((List<dynamic> item) {
         return FloatingActionButton(
           backgroundColor: item[1] == _currentMode ? selected : notSelected,
-          onPressed: () => setState(() => _currentMode = item[1]),
+          onPressed: () => setState(() {
+                if (_currentMode != item[1])
+                  _currentMode = item[1];
+                else
+                  _currentMode = Modes.Nothing;
+              }),
           child: item[0],
         );
       }).toList(),
