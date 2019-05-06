@@ -1,0 +1,53 @@
+[33mcommit c560a76c48284ba18c97e10313376c829bdd282f[m[33m ([m[1;36mHEAD[m[33m)[m
+Author: Emil Djupvik <emil14833@gmail.com>
+Date:   Mon May 6 21:41:44 2019 +0200
+
+    Improved the modeFab
+
+[33mcommit 10b5f7f125146b62159bf466e7a27e0fa7aea664[m[33m ([m[1;32mmaster[m[33m)[m
+Author: Emil Djupvik <emil14833@gmail.com>
+Date:   Sun May 5 21:17:14 2019 +0200
+
+    made the theme dark
+
+[33mcommit 5fc54adfb0e53aa2c0aed86bc0eb1ee2f9eb6423[m
+Author: Emil Djupvik <emil14833@gmail.com>
+Date:   Sun May 5 20:31:39 2019 +0200
+
+    just some tiny changes
+
+[33mcommit 472aa273dd03dc75dc1a75be2ba7f47736bbd90b[m
+Author: Emil Djupvik <emil14833@gmail.com>
+Date:   Sun May 5 20:22:50 2019 +0200
+
+    fixed the rootnode renewing
+
+[33mcommit d31fa9fe6a58520a6d196518dc8e5374acdce636[m
+Author: Emil Djupvik <emil14833@gmail.com>
+Date:   Sun May 5 18:22:58 2019 +0200
+
+    made a modeFabKey and made it part of the rootnode
+
+[33mcommit 668751978a45a2c44becd64dfa8ca0f539e3f328[m
+Author: Emil Djupvik <emil14833@gmail.com>
+Date:   Fri May 3 20:22:31 2019 +0200
+
+    made the backdrop fall when pointing outside of it
+
+[33mcommit 237593056b1e6336ec62ac69007b5c1693c20e9f[m
+Author: Emil Djupvik <emil14833@gmail.com>
+Date:   Fri May 3 19:36:41 2019 +0200
+
+    Finnished the backdrop
+
+[33mcommit ab3cc7dfed8ac23f065b4cc06a257656dc5336ac[m
+Author: Emil Djupvik <emil14833@gmail.com>
+Date:   Fri May 3 16:46:34 2019 +0200
+
+    Added backdrop
+
+[33mcommit 942ece0627c744033a90f095108b26efd5a34b8d[m
+Author: Emil Djupvik <emil14833@gmail.com>
+Date:   Thu May 2 19:10:43 2019 +0200
+
+    init before adding backdrop
