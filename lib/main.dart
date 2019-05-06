@@ -18,9 +18,10 @@ class MyApp extends StatelessWidget {
         title: "Gravity",
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          accentColor: Colors.orange[800],
+          accentColor: Colors.orange.shade800,
           highlightColor: Colors.lightBlueAccent,
           backgroundColor: Color(0xff303030),
+          disabledColor: Colors.grey.shade800,
           textTheme: TextTheme(
             title: TextStyle(
               fontSize: 32.0,

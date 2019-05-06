@@ -23,7 +23,7 @@ class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
         floatingActionButton: FloatingActionButton(
           onPressed: widget.onBackPressed,
           backgroundColor: Theme.of(context).accentColor,
-          child: Icon(Icons.arrow_back),
+          child: Icon(Icons.arrow_downward),
         ),
         body: TabBarView(
           controller: TabController(length: 2, initialIndex: 1, vsync: this),

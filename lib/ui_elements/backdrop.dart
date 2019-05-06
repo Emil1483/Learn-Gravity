@@ -77,10 +77,7 @@ class _BackdropPageState extends State<BackdropPage>
       key: _customFabKey,
       mainColor: Theme.of(context).primaryColor,
       buttons: <Widget>[
-        GravitySlider(),
-        ModeFab(
-          key: _modeFabKey,
-        ),
+        ModeFab(key: _modeFabKey),
         FloatingActionButton(
           heroTag: "resetButton",
           backgroundColor: Theme.of(context).accentColor,
@@ -92,6 +89,7 @@ class _BackdropPageState extends State<BackdropPage>
           onPressed: _panelUp,
           child: Icon(Icons.info_outline),
         ),
+        GravitySlider(),
       ],
     );
 

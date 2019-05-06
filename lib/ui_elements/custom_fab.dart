@@ -8,11 +8,13 @@ class CustomFab extends StatefulWidget {
   final Widget mainIconBack;
   final Color mainColor;
   final Object heroTag;
+  final bool shrinkChildren;
 
   CustomFab({
     @required this.buttons,
     this.mainIconFront = const Icon(Icons.more_vert),
     this.mainIconBack = const Icon(Icons.close),
+    this.shrinkChildren = true,
     this.mainColor,
     this.heroTag,
     Key key,
@@ -75,18 +77,26 @@ class CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
       curve: Curves.fastOutSlowIn,
     ));
 
+    int index = 0;
     return widget.buttons.map((Widget button) {
-      return Transform(
-        alignment: Alignment.topCenter,
-        transform: Matrix4.identity()..scale(0.7),
-        child: SlideTransition(
-          position: position,
-          child: ScaleTransition(
-            scale: CurvedAnimation(
-              parent: _controller,
-              curve: Curves.easeInOut,
+      bool last = index >= widget.buttons.length - 1;
+      bool addPadding = last || !widget.shrinkChildren;
+      index += 1;
+      return Padding(
+        padding: EdgeInsets.only(bottom: addPadding ? 24.0 : 0),
+        child: Transform(
+          alignment: Alignment.bottomCenter,
+          transform: Matrix4.identity()
+            ..scale(widget.shrinkChildren ? 0.7 : 1.0),
+          child: SlideTransition(
+            position: position,
+            child: ScaleTransition(
+              scale: CurvedAnimation(
+                parent: _controller,
+                curve: Curves.easeInOut,
+              ),
+              child: button,
             ),
-            child: button,
           ),
         ),
       );
@@ -94,7 +104,6 @@ class CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
   }
 
   Widget _buildMainButton() {
-    //TODO: Fix animation from flare
     return FloatingActionButton(
       heroTag: widget.heroTag != null ? widget.heroTag : this,
       backgroundColor: widget.mainColor,
