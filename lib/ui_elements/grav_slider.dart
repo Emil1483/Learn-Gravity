@@ -9,28 +9,21 @@ class GravitySlider extends StatefulWidget {
 }
 
 class _GravitySliderState extends State<GravitySlider> {
-
   double _value;
 
   @override
   Widget build(BuildContext context) {
     RootNode rootNode = InheritedRootNode.of(context).rootNode;
     _value = rootNode.gravity;
-    return Transform.translate(
-      offset: Offset(50, 0),
-      child: SizedBox(
-        width: 200,
-        child: Slider(
-          activeColor: Theme.of(context).accentColor,
-          min: rootNode.minG,
-          max: rootNode.maxG,
-          onChanged: (double val) => setState(() {
-                _value = val;
-                rootNode.setGravity(val);
-              }),
-          value: _value,
-        ),
-      ),
+    return Slider(
+      activeColor: Theme.of(context).primaryColor,
+      min: rootNode.minG,
+      max: rootNode.maxG,
+      onChanged: (double val) => setState(() {
+            _value = val;
+            rootNode.setGravity(val);
+          }),
+      value: _value,
     );
   }
 }

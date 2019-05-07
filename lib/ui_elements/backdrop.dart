@@ -89,7 +89,7 @@ class _BackdropPageState extends State<BackdropPage>
           onPressed: _panelUp,
           child: Icon(Icons.info_outline),
         ),
-        GravitySlider(),
+        
       ],
     );
 
@@ -100,6 +100,7 @@ class _BackdropPageState extends State<BackdropPage>
       children: <Widget>[
         SpritewidgetContent(
           customFab: customFab,
+          gravitySlider: GravitySlider(),
         ),
         PositionedTransition(
           rect: animation,
