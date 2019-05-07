@@ -152,6 +152,7 @@ class Point extends Node {
   void attractFinger(Offset pos, double g) {
     Offset force = _getGravForce(pos, 0, _fingerMass, g);
     if (force == null) return;
+    if (g < 0) force *= (-1.0);
 
     _applyForce(force);
   }
@@ -159,6 +160,7 @@ class Point extends Node {
   void repelFinger(Offset pos, double g) {
     Offset force = _getGravForce(pos, 0, _fingerMass, g);
     if (force == null) return;
+    if (g < 0) force *= (-1.0);
 
     _applyForce(-force);
   }
