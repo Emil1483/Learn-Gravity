@@ -28,9 +28,9 @@ class SpritewidgetContent extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Container(
-                  height: 2,
+                  height: 15,
                   alignment: Alignment.bottomCenter,
-                  margin: EdgeInsets.symmetric(vertical: 42.0, horizontal: 22.0),
+                  margin: EdgeInsets.symmetric(vertical: 36.0, horizontal: 22.0),
                   child: Container(
                     alignment: Alignment.bottomCenter,
                     child: gravitySlider,
