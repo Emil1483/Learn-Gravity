@@ -72,12 +72,13 @@ class _BackdropPageState extends State<BackdropPage>
 
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
     RootNode rootNode = InheritedRootNode.of(context).rootNode;
+    ModeFab modeFab = ModeFab(key: _modeFabKey);
 
     customFab = CustomFab(
       key: _customFabKey,
       mainColor: Theme.of(context).primaryColor,
       buttons: <Widget>[
-        ModeFab(key: _modeFabKey),
+        modeFab,
         FloatingActionButton(
           heroTag: "resetButton",
           backgroundColor: Theme.of(context).accentColor,
@@ -89,7 +90,6 @@ class _BackdropPageState extends State<BackdropPage>
           onPressed: _panelUp,
           child: Icon(Icons.info_outline),
         ),
-        
       ],
     );
 
