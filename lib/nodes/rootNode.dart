@@ -28,11 +28,11 @@ class RootNode extends NodeWithSize {
   Function onTapped;
 
   //TODO: Improove the visuals by
-  // 1: Change the color style to a dark one
   // 2: Get better icons
   //TODO: Finish the "About Gravity" route
   //TODO: Add the possibility to add points with negative mass
-  //(Optional) TODO: Stop the rootnode from reseting after an orientaionchange
+  //TODO: Add the ability to move points
+  //TODO: Add the ability to add one point at a time with a set vel
 
   RootNode({@required Size size}) : super(size) {
     assert(size != null);
