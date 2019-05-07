@@ -65,7 +65,7 @@ class AboutRoute extends StatelessWidget {
     Widget fab = Padding(
       padding: EdgeInsets.all(16.0),
       child: Align(
-        alignment: Alignment.bottomLeft,
+        alignment: Alignment.bottomRight,
         child: FloatingActionButton(
           backgroundColor: Theme.of(context).accentColor,
           onPressed: () async {
