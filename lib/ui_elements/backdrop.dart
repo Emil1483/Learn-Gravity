@@ -83,6 +83,7 @@ class _BackdropPageState extends State<BackdropPage>
           heroTag: "resetButton",
           backgroundColor: Theme.of(context).accentColor,
           onPressed: rootNode.reset,
+          child: Icon(Icons.replay),
         ),
         FloatingActionButton(
           backgroundColor: Theme.of(context).accentColor,

@@ -11,8 +11,20 @@ class ModeFab extends StatefulWidget {
 
 class ModeFabState extends State<ModeFab> {
   final List<List<dynamic>> _modes = <List>[
-    [Icon(Icons.brightness_5), Modes.Gravity],
-    [Icon(Icons.brightness_7), Modes.Repel],
+    [
+      Padding(
+        padding: EdgeInsets.all(12.0),
+        child: Image.asset("assets/gravity_in.png"),
+      ),
+      Modes.Gravity
+    ],
+    [
+      Padding(
+        padding: EdgeInsets.all(12.0),
+        child: Image.asset("assets/gravity_out.png"),
+      ),
+      Modes.Repel
+    ],
     [Icon(Icons.bubble_chart), Modes.Add],
   ];
 

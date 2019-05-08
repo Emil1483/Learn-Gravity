@@ -32,7 +32,7 @@ class RootNode extends NodeWithSize {
   //TODO: Finish the "About Gravity" route
   //TODO: Add the possibility to add points with negative mass
   //TODO: Add the ability to move points
-  //TODO: Add the ability to add one point at a time with a set vel
+  //TODO: Add the ability to add one point at a time with a vel
 
   RootNode({@required Size size}) : super(size) {
     assert(size != null);
