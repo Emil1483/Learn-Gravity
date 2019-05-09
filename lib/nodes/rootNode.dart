@@ -27,8 +27,6 @@ class RootNode extends NodeWithSize {
   int _fpsSeen = 0;
   Function onTapped;
 
-  //TODO: Improove the visuals by
-  // 2: Get better icons
   //TODO: Finish the "About Gravity" route
   //TODO: Add the possibility to add points with negative mass
   //TODO: Add the ability to move points

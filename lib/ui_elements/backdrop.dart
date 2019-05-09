@@ -114,7 +114,7 @@ class _BackdropPageState extends State<BackdropPage>
             child: Container(
               margin: EdgeInsets.only(top: 16),
               color: theme.backgroundColor,
-              child: InfoRoute(onBackPressed: _panelDown),
+              child: InfoRoute(onBackPressed: _panelDown, animation: _controller),
             ),
           ),
         ),

@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return InheritedRootNode(
       child: MaterialApp(
-        title: "Gravity",
+        title: "How Gravity Works",
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           accentColor: Colors.orange.shade800,

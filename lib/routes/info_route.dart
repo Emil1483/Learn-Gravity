@@ -5,8 +5,11 @@ import './learning_route.dart';
 
 class InfoRoute extends StatefulWidget {
   final Function onBackPressed;
+  final AnimationController animation;
 
-  InfoRoute({@required this.onBackPressed}) : assert(onBackPressed != null);
+  InfoRoute({@required this.onBackPressed, @required this.animation})
+      : assert(onBackPressed != null),
+        assert(animation != null);
 
   @override
   _InfoRouteState createState() => _InfoRouteState();
@@ -41,8 +44,10 @@ class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
           width: circleSize,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: i == _tabController.index ? Colors.white: transparrent),
-            color: i == _tabController.index ? Colors.white : Colors.transparent,
+            border: Border.all(
+                color: i == _tabController.index ? Colors.white : transparrent),
+            color:
+                i == _tabController.index ? Colors.white : Colors.transparent,
           ),
         ),
       );
