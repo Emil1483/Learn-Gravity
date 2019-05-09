@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './about_route.dart';
 import './learning_route.dart';
+import '../animations/scale_slide.dart';
 
 class InfoRoute extends StatefulWidget {
   final Function onBackPressed;
@@ -17,13 +18,14 @@ class InfoRoute extends StatefulWidget {
 
 class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
   TabController _tabController;
-  final List<Widget> _tabs = [LearningRoute(), AboutRoute()];
+  List<Widget> _tabs;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
     _tabController.addListener(() => setState(() {}));
+    _tabs = [LearningRoute(), AboutRoute(animation: widget.animation)];
   }
 
   @override
@@ -66,10 +68,13 @@ class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
             backgroundColor: Theme.of(context).backgroundColor,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: FloatingActionButton(
-              onPressed: widget.onBackPressed,
-              backgroundColor: Theme.of(context).accentColor,
-              child: Icon(Icons.arrow_downward),
+            floatingActionButton: ScaleSlide(
+              controller: widget.animation,
+              child: FloatingActionButton(
+                onPressed: widget.onBackPressed,
+                backgroundColor: Theme.of(context).accentColor,
+                child: Icon(Icons.arrow_downward),
+              ),
             ),
             body: TabBarView(
               controller: _tabController,

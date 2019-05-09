@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../animations/scale_slide.dart';
+
 class AboutRoute extends StatelessWidget {
+  final AnimationController animation;
+
+  AboutRoute({@required this.animation}) : assert(animation != null);
+
   final List<String> skills = [
     "Use an API",
     "Use git",
@@ -66,16 +72,19 @@ class AboutRoute extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       child: Align(
         alignment: Alignment.bottomRight,
-        child: FloatingActionButton(
-          backgroundColor: Theme.of(context).accentColor,
-          onPressed: () async {
-            final url = "mailto:emil14833@gmail.com";
-            if (await canLaunch(url))
-              await launch(url);
-            else
-              throw "Could not launch $url";
-          },
-          child: Icon(Icons.mail_outline),
+        child: ScaleSlide(
+          controller: animation,
+          child: FloatingActionButton(
+            backgroundColor: Theme.of(context).accentColor,
+            onPressed: () async {
+              final url = "mailto:emil14833@gmail.com";
+              if (await canLaunch(url))
+                await launch(url);
+              else
+                throw "Could not launch $url";
+            },
+            child: Icon(Icons.mail_outline),
+          ),
         ),
       ),
     );
