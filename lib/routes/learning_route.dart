@@ -16,7 +16,13 @@ class LearningRoute extends StatelessWidget {
     );
 
     Widget intro = Text(
-      "Gravity is an universal force that affects all parts of the Universe. It is the force that causes you stay on earth. It is the force that causes apples to fall. And it is the force that causes the moon to fall. But what do I mean with the moon falling? And what IS gravity and how does it work?",
+      "Gravity is an universal force that affects all edges of the Universe. It is the force that causes you stay on earth. It is the force that causes apples to fall. And it is the force that causes the moon to fall. But what do I mean with the moon falling? And what IS gravity and how does it work?",
+      style: textTheme.body1,
+      textAlign: TextAlign.center,
+    );
+
+    Widget introForce = Text(
+      "But before we can understand how the force of gravity works, we must first understand what a force is.",
       style: textTheme.body1,
       textAlign: TextAlign.center,
     );
@@ -27,6 +33,8 @@ class LearningRoute extends StatelessWidget {
         title,
         gravityGif,
         intro,
+        SizedBox(height: 16.0),
+        introForce,
       ],
     );
   }
