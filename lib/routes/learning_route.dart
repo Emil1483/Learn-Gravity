@@ -39,13 +39,24 @@ class LearningRoute extends StatelessWidget {
       textAlign: TextAlign.center,
     );
 
+    Widget binaryGifs = Column(
+      children: <Widget>[
+        Image.asset(
+          "assets/binary_system_2.gif",
+        ),
+        Image.asset(
+          "assets/binary_system.gif",
+        ),
+      ],
+    );
+
     double width = MediaQuery.of(context).size.width;
-    double maxWidth = 600;
+    double maxWidth = 500;
     return ListView(
       padding: width <= maxWidth
           ? EdgeInsets.symmetric(horizontal: 40.0, vertical: 48.0)
           : EdgeInsets.symmetric(
-              horizontal: 40.0 + (width - maxWidth), vertical: 48.0),
+              horizontal: 40.0 + (width - maxWidth) / 2, vertical: 48.0),
       children: <Widget>[
         title,
         gravityGif,
@@ -54,6 +65,7 @@ class LearningRoute extends StatelessWidget {
         introForce,
         forceGif,
         forceExplained,
+        binaryGifs,
         SizedBox(height: 100.0),
       ],
     );
