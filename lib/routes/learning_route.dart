@@ -27,8 +27,12 @@ class LearningRoute extends StatelessWidget {
       textAlign: TextAlign.center,
     );
 
+    double width = MediaQuery.of(context).size.width;
+    double maxWidth = 600;
     return ListView(
-      padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 48.0),
+      padding: width <= maxWidth
+          ? EdgeInsets.symmetric(horizontal: 40.0, vertical: 48.0)
+          : EdgeInsets.symmetric(horizontal: 40.0 + (width - maxWidth), vertical: 48.0),
       children: <Widget>[
         title,
         gravityGif,
