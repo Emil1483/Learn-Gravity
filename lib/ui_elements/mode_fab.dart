@@ -39,8 +39,9 @@ class ModeFabState extends State<ModeFab> {
 
     return Column(
       children: _modes.map((List<dynamic> item) {
-        return Padding(
-          padding: EdgeInsets.only(top: 24.0),
+        return Transform.scale(
+          alignment: Alignment.topCenter,
+          scale: 0.7,
           child: FloatingActionButton(
             backgroundColor: item[1] == _currentMode ? selected : notSelected,
             onPressed: () => setState(() {

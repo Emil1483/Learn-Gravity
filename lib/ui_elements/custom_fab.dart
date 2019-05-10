@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class CustomFab extends StatefulWidget {
-  final List<Widget> buttons;
+  final Widget child;
   final Widget mainIconFront;
   final Widget mainIconBack;
   final Color mainColor;
@@ -11,14 +11,14 @@ class CustomFab extends StatefulWidget {
   final bool shrinkChildren;
 
   CustomFab({
-    @required this.buttons,
+    @required this.child,
     this.mainIconFront = const Icon(Icons.more_vert),
     this.mainIconBack = const Icon(Icons.close),
     this.shrinkChildren = true,
     this.mainColor,
     this.heroTag,
     Key key,
-  })  : assert(buttons != null),
+  })  : assert(child != null),
         super(key: key);
 
   @override
@@ -68,39 +68,34 @@ class CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
     return newT * math.pi / 2;
   }
 
-  List<Widget> _buildSmallButtons() {
+  Widget _buildSmallButtons() {
     Animation<Offset> position = Tween<Offset>(
-      begin: Offset(0.0, 1.0),
+      begin: Offset(0.0, 0.25),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.fastOutSlowIn,
     ));
 
-    int index = 0;
-    return widget.buttons.map((Widget button) {
-      bool last = index >= widget.buttons.length - 1;
-      bool addPadding = last || !widget.shrinkChildren;
-      index += 1;
-      return Padding(
-        padding: EdgeInsets.only(bottom: addPadding ? 24.0 : 0),
-        child: Transform(
-          alignment: Alignment.bottomCenter,
-          transform: Matrix4.identity()
-            ..scale(widget.shrinkChildren ? 0.7 : 1.0),
-          child: SlideTransition(
-            position: position,
-            child: ScaleTransition(
-              scale: CurvedAnimation(
-                parent: _controller,
-                curve: Curves.easeInOut,
-              ),
-              child: button,
-            ),
-          ),
-        ),
-      );
-    }).toList();
+    return SlideTransition(
+      position: position,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (BuildContext context, Widget child) {
+          double val = CurvedAnimation(
+            parent: _controller,
+            curve: Curves.easeInOut,
+          ).value;
+          Matrix4 matrix =
+              Matrix4(val, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+          return Transform(
+            alignment: Alignment.bottomCenter,
+            transform: matrix,
+            child: widget.child,
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildMainButton() {
@@ -127,14 +122,13 @@ class CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = [];
-    for (Widget button in _buildSmallButtons()) children.add(button);
-    children.add(_buildMainButton());
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
-      children: children,
+      children: <Widget>[
+        _buildSmallButtons(),
+        _buildMainButton(),
+      ],
     );
   }
 }

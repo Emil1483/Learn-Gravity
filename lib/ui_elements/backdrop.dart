@@ -77,21 +77,31 @@ class _BackdropPageState extends State<BackdropPage>
     customFab = CustomFab(
       key: _customFabKey,
       mainColor: Theme.of(context).primaryColor,
-      buttons: <Widget>[
-        modeFab,
-        FloatingActionButton(
-          heroTag: "resetButton",
-          backgroundColor: Theme.of(context).accentColor,
-          onPressed: rootNode.reset,
-          child: Icon(Icons.replay),
-        ),
-        FloatingActionButton(
-          backgroundColor: Theme.of(context).accentColor,
-          heroTag: "infoButton",
-          onPressed: _panelUp,
-          child: Icon(Icons.info_outline),
-        ),
-      ],
+      child: Column(
+        children: <Widget>[
+          modeFab,
+          Transform.scale(
+            alignment: Alignment.topCenter,
+            scale: 0.7,
+            child: FloatingActionButton(
+              heroTag: "resetButton",
+              backgroundColor: Theme.of(context).accentColor,
+              onPressed: rootNode.reset,
+              child: Icon(Icons.replay),
+            ),
+          ),
+          Transform.scale(
+            alignment: Alignment.topCenter,
+            scale: 0.7,
+            child: FloatingActionButton(
+              backgroundColor: Theme.of(context).accentColor,
+              heroTag: "infoButton",
+              onPressed: _panelUp,
+              child: Icon(Icons.info_outline),
+            ),
+          ),
+        ],
+      ),
     );
 
     final ThemeData theme = Theme.of(context);
@@ -114,7 +124,8 @@ class _BackdropPageState extends State<BackdropPage>
             child: Container(
               margin: EdgeInsets.only(top: 16),
               color: theme.backgroundColor,
-              child: InfoRoute(onBackPressed: _panelDown, animation: _controller),
+              child:
+                  InfoRoute(onBackPressed: _panelDown, animation: _controller),
             ),
           ),
         ),
