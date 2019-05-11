@@ -1,0 +1,9 @@
+Gravity is a universal force that affects all parts of the Universe. It is the force that causes you to stay on earth. It is the force that causes apples to fall. And it is the force that causes the moon to fall. But what do I mean with the moon falling? And how does gravity work?
+
+But before we can understand how the force of gravity works, we must first understand what a force is.
+
+Forces cause objects to accelerate, and when an object is accelerating, its velocity changes. Furthermore, a force contains a magnitude and a direction. Above, the yellow arrow’s length represents the force’s magnitude. And its direction represents the force’s direction.
+
+Gravity is a an universal force between any two objects. And that is ANY two objects. That means that there is a force between me and you this very second, albeit a very weak force. Moreover, above, two objects orbit each other due to gravity. See how their gravitational forces are equal in magnitude? Think about what that means. It means that I pull on the earth as much as the earth is pulling on me.
+
+Lastly, in 1687, Newton came up with an equation for gravity that describes the magnitude of any gravitational force. The G stands for the universal gravitational constant which is about 6.67408 × 10^-11. However, in the simulations above, I used a gravitational constant of 150 to insure that the gravitational force is visible.

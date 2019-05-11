@@ -1,4 +1,0 @@
-Forces cause objects to accelerate, and when an object is accelerating,
-its velocity changes. Furthermore, a force contains a magnitude and a
-direction. Above, the yellow arrow’s length represents the force’s magnitude.
-And its direction represents the force’s direction.

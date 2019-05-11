@@ -22,17 +22,20 @@ class _LearningRouteState extends State<LearningRoute> {
   }
 
   void _getTexts() async {
-    _intro = await getText("assets/learning/intro.txt");
-    _introForce = await getText("assets/learning/introForce.txt");
-    _forceExplained = await getText("assets/learning/forceExplained.txt");
-    _gravity1 = await getText("assets/learning/gravity1.txt");
-    _gravity2 = await getText("assets/learning/gravity2.txt");
+    String string = await rootBundle.loadString("assets/learning.txt");
+    List<String> strings = string.split("\n");
+    List<String> texts = [];
+    int index = 0;
+    for (String s in strings) {
+      if (index % 2 == 0) texts.add(s);
+      index++;
+    }
+    _intro = texts[0];
+    _introForce = texts[1];
+    _forceExplained = texts[2];
+    _gravity1 = texts[3];
+    _gravity2 = texts[4];
     setState(() => _waiting = false);
-  }
-
-  Future<String> getText(String path) async {
-    String string = await rootBundle.loadString(path);
-    return string.replaceAll("\n", " ");
   }
 
   @override
@@ -52,10 +55,6 @@ class _LearningRouteState extends State<LearningRoute> {
         style: textTheme.title,
         textAlign: TextAlign.center,
       ),
-    );
-
-    Widget gravityGif = Image.asset(
-      "assets/elliptical_orbit.gif",
     );
 
     Widget intro = Text(

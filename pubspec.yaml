@@ -54,11 +54,7 @@ flutter:
     - assets/force_learning.gif
     - assets/binary_system.gif
     - assets/binary_system_2.gif
-    - assets/learning/intro.txt
-    - assets/learning/introForce.txt
-    - assets/learning/forceExplained.txt
-    - assets/learning/gravity1.txt
-    - assets/learning/gravity2.txt
+    - assets/learning.txt
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

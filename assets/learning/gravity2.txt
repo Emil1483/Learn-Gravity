@@ -1,4 +1,0 @@
-Lastly, in 1687, Newton came up with an equation for gravity that describes the
-magnitude of any gravitational force. The G stands for the universal gravitational
-constant. It is simply a number that describes how strong gravity is,and it is the
-same in all corners of the Universe.
