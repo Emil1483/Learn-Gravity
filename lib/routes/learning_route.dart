@@ -1,16 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class LearningRoute extends StatelessWidget {
+class LearningRoute extends StatefulWidget {
+  @override
+  _LearningRouteState createState() => _LearningRouteState();
+}
+
+class _LearningRouteState extends State<LearningRoute> {
+  String _intro;
+  String _introForce;
+  String _forceExplained;
+  String _gravity1;
+  String _gravity2;
+
+  bool _waiting = true;
+
+  @override
+  initState() {
+    _getTexts();
+    super.initState();
+  }
+
+  void _getTexts() async {
+    _intro = await getText("assets/learning/intro.txt");
+    _introForce = await getText("assets/learning/introForce.txt");
+    _forceExplained = await getText("assets/learning/forceExplained.txt");
+    _gravity1 = await getText("assets/learning/gravity1.txt");
+    _gravity2 = await getText("assets/learning/gravity2.txt");
+    setState(() => _waiting = false);
+  }
+
+  Future<String> getText(String path) async {
+    String string = await rootBundle.loadString(path);
+    return string.replaceAll("\n", " ");
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_waiting) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    //TODO: Put all body text in a text tiles
-
-    Widget title = Text(
-      "How Does Gravity Work?",
-      style: textTheme.title,
-      textAlign: TextAlign.center,
+    Widget title = Padding(
+      padding: EdgeInsets.only(bottom: 16.0),
+      child: Text(
+        "How Does Gravity Work?",
+        style: textTheme.title,
+        textAlign: TextAlign.center,
+      ),
     );
 
     Widget gravityGif = Image.asset(
@@ -18,13 +59,13 @@ class LearningRoute extends StatelessWidget {
     );
 
     Widget intro = Text(
-      "Gravity is a universal force that affects all parts of the Universe. It is the force that causes you to stay on earth. It is the force that causes apples to fall. And it is the force that causes the moon to fall. But what do I mean with the moon falling? And what IS gravity and how does it work?",
+      _intro,
       style: textTheme.body1,
       textAlign: TextAlign.center,
     );
 
     Widget introForce = Text(
-      "But before we can understand how the force of gravity works, we must first understand what a force is.",
+      _introForce,
       style: textTheme.body1,
       textAlign: TextAlign.center,
     );
@@ -34,20 +75,39 @@ class LearningRoute extends StatelessWidget {
     );
 
     Widget forceExplained = Text(
-      "Forces cause objects to accelerate, and when an object is accelerating, its velocity changes. Furthermore, a force contains a magnitude and a direction. Above, the yellow arrow’s length represents the force’s magnitude. And its direction represents the force’s direction.",
+      _forceExplained,
       style: textTheme.body1,
       textAlign: TextAlign.center,
     );
 
-    Widget binaryGifs = Column(
+    Widget binaryGif = Image.asset(
+      "assets/binary_system.gif",
+    );
+
+    Widget formula = Text(
+      _gravity1,
+      style: textTheme.body1,
+      textAlign: TextAlign.center,
+    );
+
+    Widget binaryGif2 = Column(
       children: <Widget>[
         Image.asset(
           "assets/binary_system_2.gif",
         ),
-        Image.asset(
-          "assets/binary_system.gif",
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 22.0),
+          child: Image.asset(
+            "assets/formula.png",
+          ),
         ),
       ],
+    );
+
+    Widget gravity2 = Text(
+      _gravity2,
+      style: textTheme.body1,
+      textAlign: TextAlign.center,
     );
 
     double width = MediaQuery.of(context).size.width;
@@ -59,13 +119,15 @@ class LearningRoute extends StatelessWidget {
               horizontal: 40.0 + (width - maxWidth) / 2, vertical: 48.0),
       children: <Widget>[
         title,
-        gravityGif,
         intro,
         SizedBox(height: 16.0),
         introForce,
         forceGif,
         forceExplained,
-        binaryGifs,
+        binaryGif,
+        formula,
+        binaryGif2,
+        gravity2,
         SizedBox(height: 100.0),
       ],
     );

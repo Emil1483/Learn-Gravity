@@ -48,11 +48,17 @@ flutter:
     - assets/button_animation.flr
     - assets/gravity_out.png
     - assets/gravity_in.png
+    - assets/formula.png
     - assets/test_gif.gif
     - assets/elliptical_orbit.gif
     - assets/force_learning.gif
     - assets/binary_system.gif
     - assets/binary_system_2.gif
+    - assets/learning/intro.txt
+    - assets/learning/introForce.txt
+    - assets/learning/forceExplained.txt
+    - assets/learning/gravity1.txt
+    - assets/learning/gravity2.txt
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 
