@@ -111,9 +111,11 @@ class _LearningRouteState extends State<LearningRoute> {
       textAlign: TextAlign.center,
     );
 
-    Widget demo1 = Image.asset(
-      "assets/gifs/demo_1.gif",
+    Widget fallingGif = Image.asset(
+      "assets/gifs/gravity_demo.gif",
     );
+
+    Widget orbit = Image.asset("assets/gifs/elliptical_orbit.gif",);
 
     double width = MediaQuery.of(context).size.width;
     double maxWidth = 500;
@@ -133,7 +135,8 @@ class _LearningRouteState extends State<LearningRoute> {
         formula,
         binaryGif2,
         gravity2,
-        demo1,
+        fallingGif,
+        orbit,
         SizedBox(height: 100.0),
       ],
     );
