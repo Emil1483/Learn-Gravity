@@ -49,10 +49,10 @@ flutter:
     - assets/gravity_out.png
     - assets/gravity_in.png
     - assets/formula.png
-    - assets/test_gif.gif
-    - assets/elliptical_orbit.gif
-    - assets/force_learning.gif
-    - assets/binary_system.gif
+    - assets/gifs/test_gif.gif
+    - assets/gifs/elliptical_orbit.gif
+    - assets/gifs/force_learning.gif
+    - assets/gifs/binary_system.gif
     - assets/binary_system_2.gif
     - assets/learning.txt
   #  - images/a_dot_burr.jpeg

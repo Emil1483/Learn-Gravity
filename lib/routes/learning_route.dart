@@ -21,6 +21,8 @@ class _LearningRouteState extends State<LearningRoute> {
     super.initState();
   }
 
+  // TODO: Make a test-yourself widget at the end
+
   void _getTexts() async {
     String string = await rootBundle.loadString("assets/learning.txt");
     List<String> strings = string.split("\n");
@@ -70,7 +72,7 @@ class _LearningRouteState extends State<LearningRoute> {
     );
 
     Widget forceGif = Image.asset(
-      "assets/force_learning.gif",
+      "assets/gifs/force_learning.gif",
     );
 
     Widget forceExplained = Text(
@@ -80,7 +82,7 @@ class _LearningRouteState extends State<LearningRoute> {
     );
 
     Widget binaryGif = Image.asset(
-      "assets/binary_system.gif",
+      "assets/gifs/binary_system.gif",
     );
 
     Widget formula = Text(
@@ -92,7 +94,7 @@ class _LearningRouteState extends State<LearningRoute> {
     Widget binaryGif2 = Column(
       children: <Widget>[
         Image.asset(
-          "assets/binary_system_2.gif",
+          "assets/gifs/binary_system_2.gif",
         ),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 22.0),
