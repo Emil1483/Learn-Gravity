@@ -111,6 +111,10 @@ class _LearningRouteState extends State<LearningRoute> {
       textAlign: TextAlign.center,
     );
 
+    Widget demo1 = Image.asset(
+      "assets/gifs/demo_1.gif",
+    );
+
     double width = MediaQuery.of(context).size.width;
     double maxWidth = 500;
     return ListView(
@@ -129,6 +133,7 @@ class _LearningRouteState extends State<LearningRoute> {
         formula,
         binaryGif2,
         gravity2,
+        demo1,
         SizedBox(height: 100.0),
       ],
     );
