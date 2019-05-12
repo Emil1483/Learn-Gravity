@@ -12,6 +12,8 @@ class _LearningRouteState extends State<LearningRoute> {
   String _forceExplained;
   String _gravity1;
   String _gravity2;
+  String _falling;
+  String _question;
 
   bool _waiting = true;
 
@@ -37,6 +39,8 @@ class _LearningRouteState extends State<LearningRoute> {
     _forceExplained = texts[2];
     _gravity1 = texts[3];
     _gravity2 = texts[4];
+    _falling = texts[5];
+    _question = texts[6];
     setState(() => _waiting = false);
   }
 
@@ -85,8 +89,8 @@ class _LearningRouteState extends State<LearningRoute> {
       "assets/gifs/binary_system.gif",
     );
 
-    Widget formula = Text(
-      _gravity1,
+    Widget gravity2 = Text(
+      _gravity2,
       style: textTheme.body1,
       textAlign: TextAlign.center,
     );
@@ -105,8 +109,8 @@ class _LearningRouteState extends State<LearningRoute> {
       ],
     );
 
-    Widget gravity2 = Text(
-      _gravity2,
+    Widget formula = Text(
+      _gravity1,
       style: textTheme.body1,
       textAlign: TextAlign.center,
     );
@@ -115,7 +119,24 @@ class _LearningRouteState extends State<LearningRoute> {
       "assets/gifs/gravity_demo.gif",
     );
 
-    Widget orbit = Image.asset("assets/gifs/elliptical_orbit.gif",);
+    Widget falling = Text(
+      _falling,
+      style: textTheme.body1,
+      textAlign: TextAlign.center,
+    );
+
+    Widget orbit = Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: Image.asset(
+        "assets/gifs/elliptical_orbit.gif",
+      ),
+    );
+
+    Widget question = Text(
+      _question,
+      style: textTheme.body1,
+      textAlign: TextAlign.center,
+    );
 
     double width = MediaQuery.of(context).size.width;
     double maxWidth = 500;
@@ -136,7 +157,9 @@ class _LearningRouteState extends State<LearningRoute> {
         binaryGif2,
         gravity2,
         fallingGif,
+        falling,
         orbit,
+        question,
         SizedBox(height: 100.0),
       ],
     );
