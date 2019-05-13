@@ -175,7 +175,7 @@ class _LearningRouteState extends State<LearningRoute> {
                   "this is the correct answear",
                   "bad",
                 ],
-                correct: 1,
+                correct: 2,
               ),
             ],
           ),
