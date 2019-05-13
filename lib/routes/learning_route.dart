@@ -168,44 +168,14 @@ class _LearningRouteState extends State<LearningRoute> {
           child: Quiz(
             questions: <Question>[
               Question(
-                question: "This is mock data",
+                question: "Stupid question where the answear is obvios",
                 choises: <String>[
-                  "a",
-                  "b",
-                  "c",
-                  "d",
+                  "not correct",
+                  "wrong",
+                  "this is the correct answear",
+                  "bad",
                 ],
                 correct: 1,
-              ),
-              Question(
-                question: "This is mock data",
-                choises: <String>[
-                  "a",
-                  "b",
-                  "c",
-                  "d",
-                ],
-                correct: 0,
-              ),
-              Question(
-                question: "This is mock data",
-                choises: <String>[
-                  "a",
-                  "b",
-                  "c",
-                  "d",
-                ],
-                correct: 3,
-              ),
-              Question(
-                question: "This is mock data",
-                choises: <String>[
-                  "a",
-                  "b",
-                  "c",
-                  "d",
-                ],
-                correct: 0,
               ),
             ],
           ),
