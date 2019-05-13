@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           accentColor: Colors.orange.shade800,
           highlightColor: Colors.lightBlueAccent,
+          cardColor: Color(0xff424242),
           backgroundColor: Color(0xff303030),
           disabledColor: Colors.grey.shade800,
           textTheme: TextTheme(

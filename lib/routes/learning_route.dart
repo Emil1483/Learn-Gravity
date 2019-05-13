@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../ui_elements/quiz.dart';
+import '../models/question.dart';
+
 class LearningRoute extends StatefulWidget {
   @override
   _LearningRouteState createState() => _LearningRouteState();
@@ -160,6 +163,53 @@ class _LearningRouteState extends State<LearningRoute> {
         falling,
         orbit,
         question,
+        Padding(
+          padding: EdgeInsets.only(top: 22.0),
+          child: Quiz(
+            questions: <Question>[
+              Question(
+                question: "This is mock data",
+                choises: <String>[
+                  "a",
+                  "b",
+                  "c",
+                  "d",
+                ],
+                correct: 1,
+              ),
+              Question(
+                question: "This is mock data",
+                choises: <String>[
+                  "a",
+                  "b",
+                  "c",
+                  "d",
+                ],
+                correct: 0,
+              ),
+              Question(
+                question: "This is mock data",
+                choises: <String>[
+                  "a",
+                  "b",
+                  "c",
+                  "d",
+                ],
+                correct: 3,
+              ),
+              Question(
+                question: "This is mock data",
+                choises: <String>[
+                  "a",
+                  "b",
+                  "c",
+                  "d",
+                ],
+                correct: 0,
+              ),
+            ],
+          ),
+        ),
         SizedBox(height: 100.0),
       ],
     );
