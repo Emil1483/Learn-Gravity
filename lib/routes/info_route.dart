@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import './about_route.dart';
@@ -6,10 +7,18 @@ import '../animations/scale_slide.dart';
 
 class InfoRoute extends StatefulWidget {
   final Function onBackPressed;
+  final Function onQuizCompleted;
   final AnimationController animation;
+  final bool isUnlocked;
 
-  InfoRoute({@required this.onBackPressed, @required this.animation})
-      : assert(onBackPressed != null),
+  InfoRoute({
+    @required this.onBackPressed,
+    @required this.animation,
+    @required this.onQuizCompleted,
+    @required this.isUnlocked,
+  })  : assert(onBackPressed != null),
+        assert(onQuizCompleted != null),
+        assert(isUnlocked != null),
         assert(animation != null);
 
   @override
@@ -25,7 +34,10 @@ class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
     super.initState();
     _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
     _tabController.addListener(() => setState(() {}));
-    _tabs = [LearningRoute(), AboutRoute(animation: widget.animation)];
+    _tabs = [
+      LearningRoute(onQuizCompleted: widget.onQuizCompleted),
+      AboutRoute(animation: widget.animation)
+    ];
   }
 
   @override
@@ -68,27 +80,34 @@ class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
             backgroundColor: Theme.of(context).backgroundColor,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: ScaleSlide(
-              controller: widget.animation,
-              child: FloatingActionButton(
-                onPressed: widget.onBackPressed,
-                backgroundColor: Theme.of(context).accentColor,
-                child: Icon(Icons.arrow_downward),
-              ),
-            ),
+            floatingActionButton: widget.isUnlocked
+                ? ScaleSlide(
+                    controller: widget.animation,
+                    child: FloatingActionButton(
+                      onPressed: widget.onBackPressed,
+                      backgroundColor: Theme.of(context).accentColor,
+                      child: Icon(Icons.arrow_downward),
+                    ),
+                  )
+                : null,
             body: TabBarView(
+              physics: widget.isUnlocked
+                  ? AlwaysScrollableScrollPhysics()
+                  : NeverScrollableScrollPhysics(),
               controller: _tabController,
               children: _tabs,
             ),
           ),
-          Container(
-            height: circleSize,
-            margin: EdgeInsets.only(bottom: 100),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: circles,
-            ),
-          ),
+          widget.isUnlocked
+              ? Container(
+                  height: circleSize,
+                  margin: EdgeInsets.only(bottom: 100),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: circles,
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

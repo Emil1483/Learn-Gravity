@@ -17,6 +17,8 @@ class _BackdropPageState extends State<BackdropPage>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
+  bool _unlocked;
+
   static const _PANEL_HEADER_HEIGHT = 64.0;
   static const _PANEL_HEADER_PEAKING = 0.0;
 
@@ -28,13 +30,21 @@ class _BackdropPageState extends State<BackdropPage>
   void initState() {
     super.initState();
     _controller = new AnimationController(
-        duration: const Duration(milliseconds: 100), value: 0.0, vsync: this);
+        duration: const Duration(milliseconds: 100), value: 1.0, vsync: this);
+    _unlocked = false;
   }
 
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
+  }
+
+  void unlock() {
+    print("Unlocking the rest of the app!");
+    setState(() {
+      _unlocked = true;
+    });
   }
 
   bool get _isPanelVisible {
@@ -51,6 +61,7 @@ class _BackdropPageState extends State<BackdropPage>
   }
 
   void _panelDown() {
+    if (!_unlocked) return;
     if (_isPanelVisible) {
       _controller.fling(velocity: -1.0);
       _customFabKey.currentState.down();
@@ -58,12 +69,12 @@ class _BackdropPageState extends State<BackdropPage>
   }
 
   Animation<RelativeRect> _getPanelAnimation(BoxConstraints constraints) {
-    final double top = constraints.biggest.height;
+    final double top = constraints.biggest.height - _PANEL_HEADER_PEAKING;
     final double bottom = 0;
     return RelativeRectTween(
-      begin:
-          RelativeRect.fromLTRB(0.0, top - _PANEL_HEADER_PEAKING, 0.0, bottom),
-      end: RelativeRect.fromLTRB(0.0, _PANEL_HEADER_HEIGHT, 0.0, 0.0),
+      begin: RelativeRect.fromLTRB(0.0, top, 0.0, bottom),
+      end: RelativeRect.fromLTRB(
+          0.0, _unlocked ? _PANEL_HEADER_HEIGHT : 0, 0.0, 0.0),
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.linear,
@@ -124,8 +135,11 @@ class _BackdropPageState extends State<BackdropPage>
             child: Container(
               margin: EdgeInsets.only(top: 16),
               color: theme.backgroundColor,
-              child:
-                  InfoRoute(onBackPressed: _panelDown, animation: _controller),
+              child: InfoRoute(
+                  onBackPressed: _panelDown,
+                  animation: _controller,
+                  onQuizCompleted: unlock,
+                  isUnlocked: _unlocked),
             ),
           ),
         ),
