@@ -6,8 +6,11 @@ import '../models/question.dart';
 
 class Quiz extends StatefulWidget {
   final List<Question> questions;
+  final Function onCompleted;
 
-  Quiz({@required this.questions}) : assert(questions != null);
+  Quiz({@required this.questions, @required this.onCompleted})
+      : assert(questions != null),
+        assert(onCompleted != null);
 
   @override
   _QuizState createState() => _QuizState();
@@ -45,8 +48,12 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
     _controller.fling(velocity: atEnd ? -1.0 : 1.0);
   }
 
-  double _getOffset(double t) {
+  double _getOffsetWrong(double t) {
     return (10 * math.sin(t * math.pi) * math.sin(t * math.pi * 3));
+  }
+
+  double _getOffsetCorrect(double t) {
+    return 0.1 * math.sin(t * math.pi) + 1;
   }
 
   void _handleUpdatedChoise(int newChoise, int qId) {
@@ -56,16 +63,29 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
     });
   }
 
+  Matrix4 _getMatrix(bool chosen, bool wrong) {
+    Matrix4 matrix = Matrix4.identity();
+    if (!chosen) return matrix;
+    if (wrong) {
+      double off = _getOffsetWrong(_controller.value);
+      matrix.translate(off);
+      return matrix;
+    } else {
+      double scale = _getOffsetCorrect(_controller.value);
+      matrix.scale(scale);
+      return matrix;
+    }
+  }
+
   Widget _buildChoise(String choise, int id, int qId) {
-    bool choosen = _chosen[qId] == id;
+    bool chosen = _chosen[qId] == id;
     bool wrong = !_correct[qId];
     return AnimatedBuilder(
       animation: _controller,
       builder: (BuildContext contect, Widget c) {
-        double xOff = choosen && wrong ? _getOffset(_controller.value) : 0;
-
-        return Transform.translate(
-          offset: Offset(xOff, 0),
+        return Transform(
+          alignment: Alignment.center,
+          transform: _getMatrix(chosen, wrong),
           child: ListTile(
             title: Text(choise),
             onTap: () => _handleUpdatedChoise(id, qId),
@@ -84,6 +104,11 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
         );
       },
     );
+  }
+
+  bool _isCorrect() {
+    for (bool isCorrect in _correct) if (!isCorrect) return false;
+    return true;
   }
 
   Widget _buildQuestion(Question q) {
@@ -147,6 +172,7 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
                     _correct[i] = _chosen[i] == questions[i].correct;
                   });
                 }
+                if (_isCorrect()) widget.onCompleted();
               },
             ),
           ),

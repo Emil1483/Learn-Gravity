@@ -178,6 +178,9 @@ class _LearningRouteState extends State<LearningRoute> {
                 correct: 2,
               ),
             ],
+            onCompleted: () {
+              print("YAY");
+            },
           ),
         ),
         SizedBox(height: 100.0),
