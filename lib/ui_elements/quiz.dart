@@ -23,6 +23,8 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
   List<bool> _checked;
   AnimationController _controller;
 
+  bool _allCorrect = false;
+
   @override
   initState() {
     super.initState();
@@ -64,10 +66,10 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
     });
   }
 
-  Matrix4 _getMatrix(bool chosen, bool wrong) {
+  Matrix4 _getMatrix(Animation animation) {
     Matrix4 matrix = Matrix4.identity();
-    if (!chosen) return matrix;
-    if (wrong) {
+    if (animation == Animation.Nothing) return matrix;
+    if (animation == Animation.Wrong) {
       double off = _getOffsetWrong(_controller.value);
       matrix.translate(off);
       return matrix;
@@ -78,32 +80,44 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
     }
   }
 
+  Widget _animatedFeedback(
+      {@required Widget child, @required Animation animation}) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (BuildContext context, Widget c) {
+        return Transform(
+          alignment: Alignment.center,
+          transform: _getMatrix(animation),
+          child: child,
+        );
+      },
+    );
+  }
+
   Widget _buildChoise(String choise, int id, int qId) {
     bool chosen = _chosen[qId] == id;
     bool wrong = !_correct[qId];
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (BuildContext contect, Widget c) {
-        return Transform(
-          alignment: Alignment.center,
-          transform: _getMatrix(chosen, wrong),
-          child: ListTile(
-            title: Text(choise),
-            onTap: () => _handleUpdatedChoise(id, qId),
-            leading: Radio(
-              activeColor: !_checked[qId]
-                  ? Theme.of(context).accentColor
-                  : _correct[qId]
-                      ? Theme.of(context).primaryColor
-                      : Theme.of(context).errorColor,
-              groupValue: _chosen[qId],
-              onChanged: (int newChoise) =>
-                  _handleUpdatedChoise(newChoise, qId),
-              value: id,
-            ),
-          ),
-        );
-      },
+    Animation animation;
+    if (!chosen)
+      animation = Animation.Nothing;
+    else
+      animation = wrong ? Animation.Wrong : Animation.Correct;
+    return _animatedFeedback(
+      animation: animation,
+      child: ListTile(
+        title: Text(choise),
+        onTap: () => _handleUpdatedChoise(id, qId),
+        leading: Radio(
+          activeColor: !_checked[qId]
+              ? Theme.of(context).accentColor
+              : _correct[qId]
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).errorColor,
+          groupValue: _chosen[qId],
+          onChanged: (int newChoise) => _handleUpdatedChoise(newChoise, qId),
+          value: id,
+        ),
+      ),
     );
   }
 
@@ -158,29 +172,41 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
       child: Column(
         children: widget.questions.map(_buildQuestion).toList()
           ..add(
-            Padding(
-              padding: EdgeInsets.only(top: 22.0),
-              child: RaisedButton(
-                color: Theme.of(context).accentColor,
-                child: Text(
-                  "Check Results",
-                  style: TextStyle(color: Colors.white),
+            _animatedFeedback(
+              animation: _allCorrect ? Animation.Correct : Animation.Wrong,
+              child: Padding(
+                padding: EdgeInsets.only(top: 22.0),
+                child: RaisedButton(
+                  color: Theme.of(context).accentColor,
+                  child: Text(
+                    "Check Results",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    for (int i = 0; i < widget.questions.length; i++) {
+                      setState(() {
+                        _checked[i] = _chosen[i] != -1;
+                        _correct[i] = _chosen[i] == widget.questions[i].correct;
+                      });
+                    }
+
+                    _animationPlay();
+
+                    setState(() => _allCorrect = _isCorrect());
+
+                    if (_allCorrect) widget.onCompleted();
+                  },
                 ),
-                onPressed: () {
-                  _animationPlay();
-                  List<Question> questions = widget.questions;
-                  for (int i = 0; i < questions.length; i++) {
-                    setState(() {
-                      _checked[i] = _chosen[i] != -1;
-                      _correct[i] = _chosen[i] == questions[i].correct;
-                    });
-                  }
-                  if (_isCorrect()) widget.onCompleted();
-                },
               ),
             ),
           ),
       ),
     );
   }
+}
+
+enum Animation {
+  Wrong,
+  Correct,
+  Nothing,
 }
