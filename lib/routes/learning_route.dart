@@ -169,14 +169,45 @@ class _LearningRouteState extends State<LearningRoute> {
         Quiz(
           questions: <Question>[
             Question(
-              question: "Stupid question where the answear is obvios",
+              question:
+                  "When is there a gravitational force between two objects?",
               choises: <String>[
-                "not correct",
-                "wrong",
-                "this is the correct answear",
-                "bad",
+                "When the two objects are big enough.",
+                "When the two objects have enough mass.",
+                "All the time.",
               ],
               correct: 2,
+            ),
+            Question(
+              question:
+                  "Emagine two seperate objects floating in space. You notice no gravitational force, why must that be?",
+              choises: <String>[
+                "Because the two objects are too small and/or too far apart.",
+                "Because sometimes, gravity is just weaker.",
+                "Because gravity only affects some objects.",
+              ],
+              correct: 0,
+            ),
+            Question(
+              question:
+                  "When two objects gets closer together, what happened to the gravitational force between them?",
+              choises: <String>[
+                "The force increases.",
+                "The force decreases.",
+                "Nothing, the gravitational force is constant.",
+              ],
+              correct: 0,
+            ),
+            Question(
+              question:
+                  "Earlier, I stated that I used a gravitational constant of 150 instead of the real gravitational constant. Why did I do this?",
+              choises: <String>[
+                "Because that would be easier for my computer to handle.",
+                "Because using the real gravitational constant would result in a way too weak force.",
+                "150 is a round number.",
+                "Because using the real gravitational constant would result in a way too strong force. And by increasing the gravitational constant, the force becomes weaker.",
+              ],
+              correct: 1,
             ),
           ],
           onCompleted: widget.onQuizCompleted,

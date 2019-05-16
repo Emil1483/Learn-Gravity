@@ -27,10 +27,11 @@ class RootNode extends NodeWithSize {
   int _fpsSeen = 0;
   Function onTapped;
 
-  //TODO: Finish the "About Gravity" route
   //TODO: Add the possibility to add points with negative mass
   //TODO: Add the ability to move points
   //TODO: Add the ability to add one point at a time with a vel
+  //TODO: Orginize the code better so everything is under an inherited widget so we don't have to pass in so many variables
+    //This should also allowy you to fix the bug where the quiz state gets lost when navigating to and from "Why does this app exist?"
 
   RootNode({@required Size size}) : super(size) {
     assert(size != null);
