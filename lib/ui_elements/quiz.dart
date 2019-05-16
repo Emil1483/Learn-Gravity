@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 
 import '../models/question.dart';
 
+enum Animation {
+  Wrong,
+  Correct,
+  Nothing,
+}
+
 class Quiz extends StatefulWidget {
   final List<Question> questions;
   final Function onCompleted;
@@ -203,10 +209,4 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
       ),
     );
   }
-}
-
-enum Animation {
-  Wrong,
-  Correct,
-  Nothing,
 }
