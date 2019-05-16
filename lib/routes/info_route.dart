@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './about_route.dart';
 import './learning_route.dart';
 import '../animations/scale_slide.dart';
+import '../models/quiz_data.dart';
 
 class InfoRoute extends StatefulWidget {
   final Function onBackPressed;
@@ -27,16 +28,23 @@ class InfoRoute extends StatefulWidget {
 class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
   TabController _tabController;
   List<Widget> _tabs;
+  QuizData _quizData;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
     _tabController.addListener(() => setState(() {}));
+    _quizData = QuizData(checked: null, chosen: null, correct: null);
     _tabs = [
       LearningRoute(
         onQuizCompleted: widget.onQuizCompleted,
+        onQuizChanged: (QuizData data) {
+          setState(() =>_quizData = data);
+          print(_quizData.checked);
+        },
         key: PageStorageKey(0),
+        quizData: _quizData,
       ),
       AboutRoute(animation: widget.animation)
     ];

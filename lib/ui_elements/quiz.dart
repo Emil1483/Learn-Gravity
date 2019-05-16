@@ -3,14 +3,23 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../models/question.dart';
+import '../models/quiz_data.dart';
 
 class Quiz extends StatefulWidget {
   final List<Question> questions;
   final Function onCompleted;
+  final Function onQuizChanged;
+  final QuizData quizData;
 
-  Quiz({@required this.questions, @required this.onCompleted, Key key})
+  Quiz(
+      {@required this.questions,
+      @required this.onCompleted,
+      @required this.onQuizChanged,
+      this.quizData,
+      Key key})
       : assert(questions != null),
         assert(onCompleted != null),
+        assert(onQuizChanged != null),
         super(key: key);
 
   @override
@@ -26,9 +35,17 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
   @override
   initState() {
     super.initState();
-    _chosen = widget.questions.map((Question q) => -1).toList();
-    _correct = widget.questions.map((Question q) => false).toList();
-    _checked = widget.questions.map((Question q) => false).toList();
+    print(widget.quizData.checked);
+    if (widget.quizData.hasData()) {
+      QuizData q = widget.quizData;
+      _chosen = q.chosen;
+      _checked = q.checked;
+      _correct = q.correct;
+    } else {
+      _chosen = widget.questions.map((Question q) => -1).toList();
+      _correct = widget.questions.map((Question q) => false).toList();
+      _checked = widget.questions.map((Question q) => false).toList();
+    }
     _controller = new AnimationController(
       duration: const Duration(milliseconds: 100),
       value: 0.0,
@@ -58,6 +75,13 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
   }
 
   void _handleUpdatedChoise(int newChoise, int qId) {
+    widget.onQuizChanged(
+      QuizData(
+        checked: _checked,
+        chosen: _chosen,
+        correct: _correct,
+      ),
+    );
     setState(() {
       _chosen[qId] = newChoise;
       _checked[qId] = false;

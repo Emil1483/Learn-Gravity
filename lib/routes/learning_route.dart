@@ -3,11 +3,18 @@ import 'package:flutter/services.dart';
 
 import '../ui_elements/quiz.dart';
 import '../models/question.dart';
+import '../models/quiz_data.dart';
 
 class LearningRoute extends StatefulWidget {
   final Function onQuizCompleted;
+  final Function onQuizChanged;
+  final QuizData quizData;
 
-  LearningRoute({@required this.onQuizCompleted, Key key})
+  LearningRoute(
+      {@required this.onQuizCompleted,
+      this.onQuizChanged,
+      this.quizData,
+      Key key})
       : assert(onQuizCompleted != null),
         super(key: key);
 
@@ -167,6 +174,8 @@ class _LearningRouteState extends State<LearningRoute> {
         orbit,
         question,
         Quiz(
+          quizData: widget.quizData,
+          onQuizChanged: widget.onQuizChanged,
           questions: <Question>[
             Question(
               question: "Stupid question where the answear is obvios",
