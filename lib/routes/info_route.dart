@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import './about_route.dart';
@@ -35,7 +34,10 @@ class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
     _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
     _tabController.addListener(() => setState(() {}));
     _tabs = [
-      LearningRoute(onQuizCompleted: widget.onQuizCompleted),
+      LearningRoute(
+        onQuizCompleted: widget.onQuizCompleted,
+        key: PageStorageKey(0),
+      ),
       AboutRoute(animation: widget.animation)
     ];
   }

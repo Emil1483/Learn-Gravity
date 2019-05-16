@@ -41,7 +41,6 @@ class _BackdropPageState extends State<BackdropPage>
   }
 
   void unlock() {
-    print("Unlocking the rest of the app!");
     setState(() {
       _unlocked = true;
     });
@@ -60,12 +59,13 @@ class _BackdropPageState extends State<BackdropPage>
     }
   }
 
-  void _panelDown() {
-    if (!_unlocked) return;
+  bool _panelDown() {
+    if (!_unlocked) return false;
     if (_isPanelVisible) {
       _controller.fling(velocity: -1.0);
       _customFabKey.currentState.down();
     }
+    return true;
   }
 
   Animation<RelativeRect> _getPanelAnimation(BoxConstraints constraints) {
@@ -73,8 +73,7 @@ class _BackdropPageState extends State<BackdropPage>
     final double bottom = 0;
     return RelativeRectTween(
       begin: RelativeRect.fromLTRB(0.0, top, 0.0, bottom),
-      end: RelativeRect.fromLTRB(
-          0.0, _unlocked ? _PANEL_HEADER_HEIGHT : 0, 0.0, 0.0),
+      end: RelativeRect.fromLTRB(0.0, _PANEL_HEADER_HEIGHT, 0.0, 0.0),
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.linear,
@@ -116,7 +115,6 @@ class _BackdropPageState extends State<BackdropPage>
     );
 
     final ThemeData theme = Theme.of(context);
-    final animation = _getPanelAnimation(constraints);
     rootNode.setModeFabKey(_modeFabKey);
     return Stack(
       children: <Widget>[
@@ -125,7 +123,7 @@ class _BackdropPageState extends State<BackdropPage>
           gravitySlider: GravitySlider(),
         ),
         PositionedTransition(
-          rect: animation,
+          rect: _getPanelAnimation(constraints),
           child: Material(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(16.0),

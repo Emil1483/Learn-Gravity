@@ -8,9 +8,10 @@ class Quiz extends StatefulWidget {
   final List<Question> questions;
   final Function onCompleted;
 
-  Quiz({@required this.questions, @required this.onCompleted})
+  Quiz({@required this.questions, @required this.onCompleted, Key key})
       : assert(questions != null),
-        assert(onCompleted != null);
+        assert(onCompleted != null),
+        super(key: key);
 
   @override
   _QuizState createState() => _QuizState();
@@ -152,31 +153,34 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: widget.questions.map(_buildQuestion).toList()
-        ..add(
-          Padding(
-            padding: EdgeInsets.only(top: 22.0),
-            child: RaisedButton(
-              color: Theme.of(context).accentColor,
-              child: Text(
-                "Check Results",
-                style: TextStyle(color: Colors.white),
+    return Padding(
+      padding: EdgeInsets.only(top: 22.0),
+      child: Column(
+        children: widget.questions.map(_buildQuestion).toList()
+          ..add(
+            Padding(
+              padding: EdgeInsets.only(top: 22.0),
+              child: RaisedButton(
+                color: Theme.of(context).accentColor,
+                child: Text(
+                  "Check Results",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  _animationPlay();
+                  List<Question> questions = widget.questions;
+                  for (int i = 0; i < questions.length; i++) {
+                    setState(() {
+                      _checked[i] = _chosen[i] != -1;
+                      _correct[i] = _chosen[i] == questions[i].correct;
+                    });
+                  }
+                  if (_isCorrect()) widget.onCompleted();
+                },
               ),
-              onPressed: () {
-                _animationPlay();
-                List<Question> questions = widget.questions;
-                for (int i = 0; i < questions.length; i++) {
-                  setState(() {
-                    _checked[i] = _chosen[i] != -1;
-                    _correct[i] = _chosen[i] == questions[i].correct;
-                  });
-                }
-                if (_isCorrect()) widget.onCompleted();
-              },
             ),
           ),
-        ),
+      ),
     );
   }
 }

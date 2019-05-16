@@ -173,7 +173,7 @@ class RootNode extends NodeWithSize {
 
     _atract();
 
-    if (_pointersPos.length > 0 && onTapped != null) onTapped();
+    if (_pointersPos.length > 0 && onTapped != null) if (!onTapped()) return;
 
     mode = _modeFabKey.currentState.mode;
 
