@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../nodes/rootNode.dart';
 import '../ui_elements/custom_fab.dart';
@@ -17,7 +18,7 @@ class _BackdropPageState extends State<BackdropPage>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
-  bool _unlocked;
+  bool _unlocked = false;
 
   static const _PANEL_HEADER_HEIGHT = 64.0;
   static const _PANEL_HEADER_PEAKING = 0.0;
@@ -31,7 +32,8 @@ class _BackdropPageState extends State<BackdropPage>
     super.initState();
     _controller = new AnimationController(
         duration: const Duration(milliseconds: 100), value: 1.0, vsync: this);
-    _unlocked = false;
+
+    _getUnlocked();
   }
 
   @override
@@ -40,7 +42,17 @@ class _BackdropPageState extends State<BackdropPage>
     _controller.dispose();
   }
 
-  void unlock() {
+  void _getUnlocked() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool unlocked = prefs.getBool("unlocked");
+    setState(() {
+      if (unlocked != null) _unlocked = unlocked;
+    });
+  }
+
+  void unlock() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("unlocked", true);
     setState(() {
       _unlocked = true;
     });

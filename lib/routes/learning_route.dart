@@ -168,6 +168,7 @@ class _LearningRouteState extends State<LearningRoute> {
         question,
         Quiz(
           questions: <Question>[
+            /*
             Question(
               question:
                   "When is there a gravitational force between two objects?",
@@ -198,6 +199,7 @@ class _LearningRouteState extends State<LearningRoute> {
               ],
               correct: 0,
             ),
+            */
             Question(
               question:
                   "Earlier, I stated that I used a gravitational constant of 150 instead of the real gravitational constant. Why did I do this?",
