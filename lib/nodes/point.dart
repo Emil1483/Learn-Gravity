@@ -94,7 +94,7 @@ class Point extends Node {
   }
 
   get radius {
-    return _mass;
+    return _mass.abs();
   }
 
   get mass {
