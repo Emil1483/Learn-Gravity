@@ -20,7 +20,7 @@ class Point extends Node {
   final double _trailAlpha = 50;
   final double _fingerMass = 900;
   final double _timeBeforeDeath = 1;
-  final double _hitBoxAdd = 10;
+  final double _hitBoxAdd = 15;
 
   double _deathTimer = 0;
   bool _dead = false;
