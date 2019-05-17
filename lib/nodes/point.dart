@@ -20,18 +20,25 @@ class Point extends Node {
   final double _trailAlpha = 50;
   final double _fingerMass = 900;
   final double _timeBeforeDeath = 1;
+  final double _hitBoxAdd = 10;
 
   double _deathTimer = 0;
   bool _dead = false;
   double _maxSpeedSq;
   double _currentTrail = 0;
   Color _color;
-  double _radius;
+  double _mass;
   List<Offset> trail = List<Offset>();
   Offset _vel = Offset(0, 0);
   Offset _acc = Offset(0, 0);
 
-  Point({@required this.parentSize, Offset pos, Offset vel, double mass}) {
+  Point({
+    @required this.parentSize,
+    Offset pos,
+    Offset vel,
+    double mass,
+    bool negative = false,
+  }) {
     assert(parentSize != null);
 
     math.Random random = math.Random();
@@ -54,10 +61,14 @@ class Point extends Node {
         : Color.fromARGB(
             255, 0, 255 - (random.nextDouble() * _colorVariety).round(), 255);
 
-    if (mass != null)
-      _radius = mass;
-    else
-      _radius = random.nextDouble() * (_maxSize - _minSize) + _minSize;
+    if (mass != null) {
+      _mass = mass;
+    } else {
+      _mass = (random.nextDouble() * (_maxSize - _minSize) + _minSize);
+    }
+    if (negative) {
+      _mass = -_mass.abs();
+    }
 
     _maxSpeedSq = _maxSpeed * _maxSpeed;
   }
@@ -70,12 +81,30 @@ class Point extends Node {
     _dead = true;
   }
 
+  void cancelVel() {
+    _vel *= 0.0;
+  }
+
+  void moveBy(Offset offset) {
+    position += offset;
+  }
+
+  void setVel(Offset vel) {
+    _vel = Offset(vel.dx, vel.dy);
+  }
+
   get radius {
-    return _radius;
+    return _mass;
   }
 
   get mass {
-    return _radius;
+    return _mass;
+  }
+
+  @override
+  bool isPointInside(Offset point) {
+    double dist = (position - point).distance;
+    return dist < radius + _hitBoxAdd;
   }
 
   @override
@@ -119,10 +148,10 @@ class Point extends Node {
   }
 
   void _applyForce(Offset force) {
-    _acc += force / _radius;
+    _acc += force / _mass;
   }
 
-  Offset _getGravForce(Offset pos, double r, double mass, double g) {
+  Offset _getGravForce(Offset pos, double r, double m, double g) {
     double minDistanceSquared = (this.radius + r) * (this.radius + r);
 
     Offset force = pos - this.position;
@@ -134,7 +163,7 @@ class Point extends Node {
 
     force = Offset.fromDirection(force.direction);
 
-    double mag = g * (this._radius + mass) / distanceSquared;
+    double mag = g * _mass * m / distanceSquared;
     force *= mag;
 
     return force;
@@ -173,7 +202,7 @@ class Point extends Node {
       final double fraction = i / (_trailLength - 1);
       final int alpha = (_trailAlpha * fraction * m).round();
       paint.color = _color.withAlpha(alpha);
-      paint.strokeWidth = fraction * _radius * 2;
+      paint.strokeWidth = fraction * _mass * 2;
       paint.strokeCap = StrokeCap.round;
 
       canvas.drawLine(trail[i] - position, trail[i + 1] - position, paint);
@@ -188,11 +217,12 @@ class Point extends Node {
 
     Paint paint = Paint();
     paint.color = _color.withAlpha(alpha);
+    paint.style = _mass > 0 ? PaintingStyle.fill : PaintingStyle.stroke;
+    paint.strokeWidth = 5;
 
-    canvas.drawCircle(Offset.zero, _radius * m, paint);
+    canvas.drawCircle(Offset.zero, _mass.abs() * m, paint);
 
-    paint.style = PaintingStyle.stroke;
-
+    //paint.style = PaintingStyle.stroke;
     //paintTrail(canvas);
   }
 }

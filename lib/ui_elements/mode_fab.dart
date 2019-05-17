@@ -26,6 +26,8 @@ class ModeFabState extends State<ModeFab> {
       Modes.Repel
     ],
     [Icon(Icons.bubble_chart), Modes.Add],
+    [Icon(Icons.add_circle_outline), Modes.Negative],
+    [Icon(Icons.compare_arrows), Modes.Move],
   ];
 
   Modes _currentMode = Modes.Add;

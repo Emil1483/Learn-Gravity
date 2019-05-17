@@ -3,4 +3,6 @@ enum Modes {
   Gravity,
   Repel,
   Add,
+  Negative,
+  Move,
 }

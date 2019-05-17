@@ -31,7 +31,7 @@ class _BackdropPageState extends State<BackdropPage>
   void initState() {
     super.initState();
     _controller = new AnimationController(
-        duration: const Duration(milliseconds: 100), value: 1.0, vsync: this);
+        duration: const Duration(milliseconds: 100), value: 0.0, vsync: this);
 
     _getUnlocked();
   }

@@ -13,9 +13,9 @@ class RootNode extends NodeWithSize {
 
   final double _pointsSpread = 30;
   final double _addPointDensity = 15;
-  final double minG = -10;
-  final double maxG = 20;
-  double g = 6;
+  final double minG = -2.5;
+  final double maxG = 5;
+  double g = 1.5;
   final int _maxFpsSeen = 5;
   final double _minFps = 50;
   final double _framesBeforeToast = 200;
@@ -27,15 +27,15 @@ class RootNode extends NodeWithSize {
   int _fpsSeen = 0;
   Function onTapped;
 
-  //TODO: Add the possibility to add points with negative mass
   //TODO: Add the ability to move points
   //TODO: Add the ability to add one point at a time with a vel
   //TODO: Orginize the code better so everything is under an inherited widget so we don't have to pass in so many variables
-    //This should also allowy you to fix the bug where the quiz state gets lost when navigating to and from "Why does this app exist?"
+  //This should also allowy you to fix the bug where the quiz state gets lost when navigating to and from "Why does this app exist?"
+  //TODO: Make a tutorial for when the user unlocks the app
 
   RootNode({@required Size size}) : super(size) {
     assert(size != null);
-    
+
     print("new rootNode with: $size");
 
     userInteractionEnabled = true;
@@ -178,46 +178,67 @@ class RootNode extends NodeWithSize {
 
     mode = _modeFabKey.currentState.mode;
 
-    if (mode == Modes.Gravity) {
-      for (Map<String, dynamic> pointer in _pointersPos) {
-        for (Node node in children) {
-          if (!(node is Point)) continue;
-          Point point = node;
-          point.attractFinger(pointer["pos"], g);
-        }
-      }
-      return;
-    }
+    switch (mode) {
+      case Modes.Nothing:
+        break;
 
-    if (mode == Modes.Repel) {
-      for (Map<String, dynamic> pointer in _pointersPos) {
-        for (Node node in children) {
-          if (!(node is Point)) continue;
-          Point point = node;
-          point.repelFinger(pointer["pos"], g);
+      case Modes.Gravity:
+        for (Map<String, dynamic> pointer in _pointersPos) {
+          for (Node node in children) {
+            if (!(node is Point)) continue;
+            Point point = node;
+            point.attractFinger(pointer["pos"], g);
+          }
         }
-      }
-      return;
-    }
+        break;
 
-    if (mode == Modes.Add) {
-      for (Map<String, dynamic> pointer in _pointersPos)
-        _addPoints(_addPointDensity * dt, pointer);
-      return;
+      case Modes.Repel:
+        for (Map<String, dynamic> pointer in _pointersPos) {
+          for (Node node in children) {
+            if (!(node is Point)) continue;
+            Point point = node;
+            point.repelFinger(pointer["pos"], g);
+          }
+        }
+        break;
+
+      case Modes.Add:
+        for (Map<String, dynamic> pointer in _pointersPos)
+          _addPoints(_addPointDensity * dt, pointer);
+        break;
+
+      case Modes.Negative:
+        for (Map<String, dynamic> pointer in _pointersPos)
+          _addPoints(_addPointDensity * dt, pointer, negative: true);
+        break;
+      case Modes.Move:
+        for (Map<String, dynamic> pointer in _pointersPos) {
+          if (pointer["touchedChild"] != null &&
+              pointer["touchedChild"] is Point) {
+            Point point = pointer["touchedChild"];
+            point.moveBy(pointer["pos"] - pointer["pPos"]);
+            pointer["pPos"] = pointer["pos"];
+
+            point.cancelVel();
+          }
+        }
+        break;
     }
   }
 
-  void _addPoints(double amount, Map<String, dynamic> pointer) {
+  void _addPoints(double amount, Map<String, dynamic> pointer,
+      {negative = false}) {
     if (pointer["remainder"] >= 1) {
       pointer["remainder"]--;
       amount++;
     }
-    for (int i = 0; i < amount; i++) if (amount >= 1) _addPoint(pointer["pos"]);
+    for (int i = 0; i < amount; i++)
+      if (amount >= 1) _addPoint(pointer["pos"], negative: negative);
     double remain = amount - amount.floor();
     pointer["remainder"] += remain;
   }
 
-  void _addPoint(Offset position) {
+  void _addPoint(Offset position, {negative = false}) {
     math.Random random = math.Random();
     double a = random.nextDouble() * math.pi * 2;
     double r = random.nextDouble() * _pointsSpread;
@@ -226,6 +247,7 @@ class RootNode extends NodeWithSize {
       Point(
         parentSize: size,
         pos: position + shake,
+        negative: negative,
       ),
     );
   }
@@ -253,6 +275,11 @@ class RootNode extends NodeWithSize {
       Map<String, dynamic> newValue = {
         "id": event.pointer,
         "pos": event.boxPosition,
+        "pPos": event.boxPosition,
+        "touchedChild": children.firstWhere(
+          (Node node) => node.isPointInside(event.boxPosition),
+          orElse: () => null,
+        ),
         "remainder": 0,
       };
       _pointersPos.add(newValue);
@@ -267,8 +294,16 @@ class RootNode extends NodeWithSize {
     }
 
     if (event.type == PointerUpEvent || event.type == PointerCancelEvent) {
-      _pointersPos.removeWhere(
-          (Map<String, dynamic> pointer) => pointer["id"] == event.pointer);
+      Map<String, dynamic> pointer = _pointersPos
+          .firstWhere((var pointer) => pointer["id"] == event.pointer);
+      if (mode == Modes.Move) {
+        Node node = pointer["touchedChild"];
+        if (node != null && node is Point) {
+          Point point = node;
+          point.setVel(event.boxPosition - pointer["pPos"]);
+        }
+      }
+      _pointersPos.remove(pointer);
       return true;
     }
 
