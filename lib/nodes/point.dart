@@ -6,13 +6,12 @@ import 'package:spritewidget/spritewidget.dart';
 class Point extends Node {
   final Size parentSize;
 
-  final double _padding = 35;
+  final double _padding = 55;
   final double _minSize = 5;
   final double _maxSize = 15;
   final double _colorVariety = 150;
   final double _amountOfBlue = 0.6;
   final double _distanceMult = 1;
-  final double _dampening = 1;
   final double _maxSpeed = 7;
   final double _speedDampening = 0.95;
   final double _trailLength = 10;
@@ -136,14 +135,10 @@ class Point extends Node {
     double y = position.dy;
     double width = parentSize.width;
     double height = parentSize.height;
-    if (x + radius >= width + _padding)
-      _vel -= Offset(_vel.dx + _vel.dx * _dampening, 0);
-    if (x - radius <= -_padding)
-      _vel -= Offset(_vel.dx + _vel.dx * _dampening, 0);
-    if (y + radius >= height + _padding)
-      _vel -= Offset(0, _vel.dy + _vel.dy * _dampening);
-    if (y - radius <= -_padding)
-      _vel -= Offset(0, _vel.dy + _vel.dy * _dampening);
+    if (x > width + _padding) position = Offset(-_padding, position.dy);
+    if (x < -_padding) position = Offset(width + _padding, position.dy);
+    if (y > height + _padding) position = Offset(position.dx, -_padding);
+    if (y < -_padding) position = Offset(position.dx, height + _padding);
   }
 
   void limitSpeed() {
