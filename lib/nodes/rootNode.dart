@@ -217,6 +217,7 @@ class RootNode extends NodeWithSize {
               pointer["touchedChild"] is Point) {
             Point point = pointer["touchedChild"];
             point.moveBy(pointer["pos"] - pointer["pPos"]);
+            pointer["ppPos"] = pointer["pPos"];
             pointer["pPos"] = pointer["pos"];
 
             point.cancelVel();
@@ -276,6 +277,7 @@ class RootNode extends NodeWithSize {
         "id": event.pointer,
         "pos": event.boxPosition,
         "pPos": event.boxPosition,
+        "ppPos": event.boxPosition,
         "touchedChild": children.firstWhere(
           (Node node) => node.isPointInside(event.boxPosition),
           orElse: () => null,
@@ -300,7 +302,12 @@ class RootNode extends NodeWithSize {
         Node node = pointer["touchedChild"];
         if (node != null && node is Point) {
           Point point = node;
-          point.setVel(event.boxPosition - pointer["pPos"]);
+          bool shouldUsePpPos =
+              (event.boxPosition - pointer["pPos"]).distance == 0;
+          if (shouldUsePpPos)
+            point.setVel(event.boxPosition - pointer["ppPos"]);
+          else
+            point.setVel(event.boxPosition - pointer["pPos"]);
         }
       }
       _pointersPos.remove(pointer);
