@@ -32,7 +32,7 @@ class CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 300),
     );
     super.initState();
   }
@@ -69,32 +69,23 @@ class CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
   }
 
   Widget _buildSmallButtons() {
-    Animation<Offset> position = Tween<Offset>(
-      begin: Offset(0.0, 0.25),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.fastOutSlowIn,
-    ));
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (BuildContext context, Widget child) {
+        double val = CurvedAnimation(
+          parent: _controller,
+          curve: Curves.easeInOutCubic,
+        ).value;
+        Matrix4 matrix = Matrix4.identity();
+        matrix.translate(0.0, 45.0 * (1-val));
+        matrix.rotateX((1-val) * math.pi / 2);
 
-    return SlideTransition(
-      position: position,
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (BuildContext context, Widget child) {
-          double val = CurvedAnimation(
-            parent: _controller,
-            curve: Curves.easeInOut,
-          ).value;
-          Matrix4 matrix =
-              Matrix4(val, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-          return Transform(
-            alignment: Alignment.bottomCenter,
-            transform: matrix,
-            child: widget.child,
-          );
-        },
-      ),
+        return Transform(
+          alignment: Alignment.bottomCenter,
+          transform: matrix,
+          child: widget.child,
+        );
+      },
     );
   }
 
