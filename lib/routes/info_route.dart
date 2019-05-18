@@ -40,6 +40,7 @@ class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
       ),
       AboutRoute(animation: widget.animation)
     ];
+    widget.animation.addListener(() => setState(() {}));
   }
 
   @override
@@ -92,13 +93,15 @@ class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
                     ),
                   )
                 : null,
-            body: TabBarView(
-              physics: widget.isUnlocked
-                  ? AlwaysScrollableScrollPhysics()
-                  : NeverScrollableScrollPhysics(),
-              controller: _tabController,
-              children: _tabs,
-            ),
+            body: widget.animation.status != AnimationStatus.dismissed
+                ? TabBarView(
+                    physics: widget.isUnlocked
+                        ? AlwaysScrollableScrollPhysics()
+                        : NeverScrollableScrollPhysics(),
+                    controller: _tabController,
+                    children: _tabs,
+                  )
+                : Container(),
           ),
           widget.isUnlocked
               ? Container(

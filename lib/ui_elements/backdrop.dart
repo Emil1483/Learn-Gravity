@@ -58,14 +58,14 @@ class _BackdropPageState extends State<BackdropPage>
     });
   }
 
-  bool get _isPanelVisible {
+  bool get isPanelVisible {
     final AnimationStatus status = _controller.status;
     return status == AnimationStatus.completed ||
         status == AnimationStatus.forward;
   }
 
   void _panelUp() {
-    if (!_isPanelVisible) {
+    if (!isPanelVisible) {
       _controller.fling(velocity: 1.0);
       _customFabKey.currentState.down();
     }
@@ -73,7 +73,7 @@ class _BackdropPageState extends State<BackdropPage>
 
   bool _panelDown() {
     if (!_unlocked) return false;
-    if (_isPanelVisible) {
+    if (isPanelVisible) {
       _controller.fling(velocity: -1.0);
       _customFabKey.currentState.down();
     }
