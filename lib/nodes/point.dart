@@ -23,6 +23,7 @@ class Point extends Node {
   final double _hitBoxAdd = 15;
 
   double _deathTimer = 0;
+  bool _shouldAcc = false;
   bool _dead = false;
   double _maxSpeedSq;
   double _currentTrail = 0;
@@ -83,6 +84,7 @@ class Point extends Node {
 
   void cancelVel() {
     _vel *= 0.0;
+    _shouldAcc = false;
   }
 
   void moveBy(Offset offset) {
@@ -116,10 +118,12 @@ class Point extends Node {
     }
     _currentTrail += 1;
 
-    _vel += _acc;
-    limitSpeed();
-    position += _vel * dt * 60;
-
+    if (_shouldAcc) {
+      _vel += _acc;
+      limitSpeed();
+      position += _vel * dt * 60;
+    }
+    _shouldAcc = true;
     _acc *= 0.0;
 
     _edges();
