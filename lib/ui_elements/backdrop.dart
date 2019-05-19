@@ -31,7 +31,13 @@ class _BackdropPageState extends State<BackdropPage>
   void initState() {
     super.initState();
     _controller = new AnimationController(
-        duration: const Duration(milliseconds: 100), value: 0.0, vsync: this);
+      duration: const Duration(milliseconds: 100),
+      value: 1.0,
+      vsync: this,
+    );
+    _controller.addListener(() {
+      if (_controller.value == 0) _seeSprite();
+    });
 
     _getUnlocked();
   }
@@ -48,6 +54,7 @@ class _BackdropPageState extends State<BackdropPage>
     setState(() {
       if (unlocked != null) _unlocked = unlocked;
     });
+    prefs.setBool("seenSprite", false); // TODO: Remove this part when done implementing the tutorial
   }
 
   void unlock() async {
@@ -78,6 +85,16 @@ class _BackdropPageState extends State<BackdropPage>
       _customFabKey.currentState.down();
     }
     return true;
+  }
+
+  void _seeSprite() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool seenSprite = prefs.getBool("seenSprite");
+    if (seenSprite == null || !seenSprite) {
+      prefs.setBool("seenSprite", true);
+      //TODO: Implement a tutorial
+      print("Start tutorial!");
+    }
   }
 
   Animation<RelativeRect> _getPanelAnimation(BoxConstraints constraints) {

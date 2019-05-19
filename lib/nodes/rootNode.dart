@@ -28,9 +28,6 @@ class RootNode extends NodeWithSize {
   int _fpsSeen = 0;
   Function onTapped;
 
-  //TODO: Add the ability to add one point at a time with a vel
-  //TODO: Orginize the code better so everything is under an inherited widget so we don't have to pass in so many variables
-  //This should also allowy you to fix the bug where the quiz state gets lost when navigating to and from "Why does this app exist?"
   //TODO: Make a tutorial for when the user unlocks the app
 
   RootNode({@required Size size}) : super(size) {
