@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import './about_route.dart';
@@ -52,20 +53,28 @@ class _InfoRouteState extends State<InfoRoute> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final double circleSize = 8;
-    final Color transparrent = Colors.white.withAlpha(100);
 
     List<Widget> circles = [];
     for (int i = 0; i < _tabs.length; i++) {
       circles.add(
-        Container(
-          width: circleSize,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-                color: i == _tabController.index ? Colors.white : transparrent),
-            color:
-                i == _tabController.index ? Colors.white : Colors.transparent,
-          ),
+        AnimatedBuilder(
+          animation: _tabController.animation,
+          builder: (BuildContext context, Widget child) {
+            double dist =
+                (_tabController.offset + _tabController.index - i).abs();
+            dist = math.min(dist, 1);
+            final double transition = Curves.easeInOutCubic.transform(dist);
+            final int alpha = (255 - transition * 255).round();
+
+            return Container(
+              width: circleSize,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white.withAlpha(100)),
+                color: Colors.white.withAlpha(alpha),
+              ),
+            );
+          },
         ),
       );
       if (i >= _tabs.length - 1) continue;
