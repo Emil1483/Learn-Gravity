@@ -72,18 +72,20 @@ class CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
     return AnimatedBuilder(
       animation: _controller,
       builder: (BuildContext context, Widget child) {
-        double val = CurvedAnimation(
-          parent: _controller,
-          curve: Curves.easeInOutCubic,
-        ).value;
-        Matrix4 matrix = Matrix4.identity();
-        matrix.translate(0.0, 45.0 * (1-val));
-        matrix.rotateX((1-val) * math.pi / 2);
+        double val = 1 -
+            CurvedAnimation(
+              parent: _controller,
+              curve: Curves.easeInOutCubic,
+            ).value;
 
         return Transform(
           alignment: Alignment.bottomCenter,
-          transform: matrix,
-          child: widget.child,
+          transform: Matrix4.identity()
+            ..translate(0.0, 45.0 * val)
+            ..rotateX((val * math.pi / 2)),
+          child: SingleChildScrollView(
+            child: widget.child,
+          ),
         );
       },
     );
@@ -117,7 +119,15 @@ class CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        _buildSmallButtons(),
+        Expanded(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(top: 16.0),
+              child: _buildSmallButtons(),
+            ),
+          ),
+        ),
         _buildMainButton(),
       ],
     );
