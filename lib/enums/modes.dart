@@ -5,4 +5,5 @@ enum Modes {
   Add,
   Negative,
   Move,
+  AddWithVel,
 }

@@ -19,6 +19,7 @@ class RootNode extends NodeWithSize {
   final int _maxFpsSeen = 5;
   final double _minFps = 50;
   final double _framesBeforeToast = 200;
+  final double _addPointWithSpeedMult = 0.1;
 
   double _numRecentlyKilled = 0;
   double _toastTimer = 0;
@@ -223,7 +224,45 @@ class RootNode extends NodeWithSize {
           }
         }
         break;
+      case Modes.AddWithVel:
+        break;
     }
+  }
+
+  @override
+  void paint(Canvas canvas) {
+    super.paint(canvas);
+    if (mode == Modes.AddWithVel) {
+      Paint paint = Paint();
+      paint.strokeWidth = 5;
+      paint.color = Colors.white;
+      paint.strokeCap = StrokeCap.round;
+
+      for (Map<String, dynamic> pointer in _pointersPos) {
+        paintArrow(canvas, paint, pointer["pos"], pointer["startPos"]);
+      }
+    }
+  }
+
+  void paintArrow(Canvas canvas, Paint paint, Offset start, Offset end) {
+    if ((start - end).distance <= 5) return;
+
+    canvas.drawLine(start, end, paint);
+
+    double angle = (start - end).direction;
+
+    double angleDiff = math.pi / 7;
+    double endLineLength = 15;
+
+    Offset endLine1 = Offset.fromDirection(angle + angleDiff);
+    Offset endLine2 = Offset.fromDirection(angle - angleDiff);
+    endLine1 *= endLineLength;
+    endLine2 *= endLineLength;
+    endLine1 += end;
+    endLine2 += end;
+
+    canvas.drawLine(end, endLine1, paint);
+    canvas.drawLine(end, endLine2, paint);
   }
 
   void _addPoints(double amount, Map<String, dynamic> pointer,
@@ -238,7 +277,8 @@ class RootNode extends NodeWithSize {
     pointer["remainder"] += remain;
   }
 
-  void _addPoint(Offset position, {negative = false}) {
+  void _addPoint(Offset position,
+      {bool negative = false, bool addSpread = true, Offset vel}) {
     math.Random random = math.Random();
     double a = random.nextDouble() * math.pi * 2;
     double r = random.nextDouble() * _pointsSpread;
@@ -246,8 +286,9 @@ class RootNode extends NodeWithSize {
     addChild(
       Point(
         parentSize: size,
-        pos: position + shake,
+        pos: position + (addSpread ? shake : Offset.zero),
         negative: negative,
+        vel: vel != null ? vel : Offset.zero,
       ),
     );
   }
@@ -268,6 +309,12 @@ class RootNode extends NodeWithSize {
 
   double get gravity => g;
 
+  Map<String, dynamic> _getPointerById(int id) {
+    return _pointersPos.firstWhere(
+      (Map<String, dynamic> pointer) => pointer["id"] == id,
+    );
+  }
+
   List<Map<String, dynamic>> _pointersPos = List();
   @override
   bool handleEvent(SpriteBoxEvent event) {
@@ -277,6 +324,7 @@ class RootNode extends NodeWithSize {
         "pos": event.boxPosition,
         "pPos": event.boxPosition,
         "ppPos": event.boxPosition,
+        "startPos": event.boxPosition,
         "touchedChild": children.lastWhere(
           (Node node) => node.isPointInside(event.boxPosition),
           orElse: () => null,
@@ -288,31 +336,42 @@ class RootNode extends NodeWithSize {
     }
 
     if (event.type == PointerMoveEvent) {
-      int index = _pointersPos.indexWhere(
-          (Map<String, dynamic> pointer) => pointer["id"] == event.pointer);
-      _pointersPos[index]["pos"] = event.boxPosition;
+      _getPointerById(event.pointer)["pos"] = event.boxPosition;
       return true;
     }
 
     if (event.type == PointerUpEvent || event.type == PointerCancelEvent) {
-      Map<String, dynamic> pointer = _pointersPos
-          .firstWhere((var pointer) => pointer["id"] == event.pointer);
+      Map<String, dynamic> pointer = _getPointerById(event.pointer);
       if (mode == Modes.Move) {
-        Node node = pointer["touchedChild"];
-        if (node != null && node is Point) {
-          Point point = node;
-          bool shouldUsePpPos =
-              (event.boxPosition - pointer["pPos"]).distance == 0;
-          if (shouldUsePpPos)
-            point.setVel(event.boxPosition - pointer["ppPos"]);
-          else
-            point.setVel(event.boxPosition - pointer["pPos"]);
-        }
+        _throwPointWithPointer(
+          pointer: pointer,
+          event: event,
+        );
+      } else if (mode == Modes.AddWithVel) {
+        _addPoint(
+          pointer["pos"],
+          addSpread: false,
+          vel: (pointer["startPos"] - pointer["pos"]) * _addPointWithSpeedMult,
+        );
       }
+
       _pointersPos.remove(pointer);
       return true;
     }
 
     return true;
+  }
+
+  void _throwPointWithPointer({
+    Map<String, dynamic> pointer,
+    SpriteBoxEvent event,
+  }) {
+    Node node = pointer["touchedChild"];
+    if (node == null || !(node is Point)) return;
+
+    Point point = node;
+    bool shouldUsePpPos = (event.boxPosition - pointer["pPos"]).distance == 0;
+    Offset pPos = shouldUsePpPos ? pointer["ppPos"] : pointer["pPos"];
+    point.setVel(event.boxPosition - pPos);
   }
 }
