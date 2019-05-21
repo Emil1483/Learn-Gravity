@@ -8,6 +8,7 @@ import '../ui_elements/grav_slider.dart';
 import '../routes/info_route.dart';
 import '../routes/spritewidget_content.dart';
 import '../inheritedWidgets/inheritedRootNode.dart';
+import '../ui_elements/tutorial_dialog.dart';
 
 class BackdropPage extends StatefulWidget {
   @override
@@ -54,7 +55,6 @@ class _BackdropPageState extends State<BackdropPage>
     setState(() {
       if (unlocked != null) _unlocked = unlocked;
     });
-    prefs.setBool("seenSprite", false); // TODO: Remove this part when done implementing the tutorial
   }
 
   void unlock() async {
@@ -95,6 +95,14 @@ class _BackdropPageState extends State<BackdropPage>
       //TODO: Implement a tutorial
       print("Start tutorial!");
     }
+    _startTutorial(); //TODO: Move this into the if block when done implementing the tutorial!
+  }
+
+  void _startTutorial() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => TutorialDialog(),
+    );
   }
 
   Animation<RelativeRect> _getPanelAnimation(BoxConstraints constraints) {
