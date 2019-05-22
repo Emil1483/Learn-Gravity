@@ -82,7 +82,7 @@ class CustomFabState extends State<CustomFab> with TickerProviderStateMixin {
           alignment: Alignment.bottomCenter,
           transform: Matrix4.identity()
             ..translate(0.0, 45.0 * val)
-            ..rotateX((val * math.pi / 2)),
+            ..rotateX(val * math.pi / 2),
           child: SingleChildScrollView(
             child: widget.child,
           ),
