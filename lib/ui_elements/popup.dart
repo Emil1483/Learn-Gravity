@@ -20,10 +20,10 @@ class _Popuptate extends State<Popup> with TickerProviderStateMixin {
   List<Widget> _buildTabs(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return <Widget>[
-      Padding(
-        padding: EdgeInsets.only(bottom: 32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      Center(
+        child: ListView(
+          padding: EdgeInsets.all(22.0),
+          shrinkWrap: true,
           children: <Widget>[
             Text(
               "Congratulations!",
@@ -39,23 +39,25 @@ class _Popuptate extends State<Popup> with TickerProviderStateMixin {
           ],
         ),
       ),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            "Use your finger to add planets",
-            style: textTheme.subtitle,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 12.0),
-          Container(
-            width: 150,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: Image.asset("assets/gifs/tutorial_1.gif"),
+      Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            Text(
+              "Use your finger to add planets",
+              style: textTheme.subtitle,
+              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            SizedBox(height: 12.0),
+            Container(
+              height: 150,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: Image.asset("assets/gifs/tutorial_1.gif"),
+              ),
+            ),
+          ],
+        ),
       ),
       Center(
         child: Text("3"),

@@ -62,10 +62,9 @@ class ModeFabState extends State<ModeFab> {
 
   Widget _buildPopupTab(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: EdgeInsets.all(32.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Center(
+      child: ListView(
+        padding: EdgeInsets.all(32.0),
         children: <Widget>[
           Text(
             "You've just unlocked a new mode!",
@@ -74,7 +73,7 @@ class ModeFabState extends State<ModeFab> {
           ),
           SizedBox(height: 12.0),
           Container(
-            width: 150,
+            height: 150,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: Image.asset("assets/gifs/tutorial_1.gif"),
