@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../enums/modes.dart';
+import './popup.dart';
 
 class ModeFab extends StatefulWidget {
   ModeFab({Key key}) : super(key: key);
@@ -41,9 +42,11 @@ class ModeFabState extends State<ModeFab> {
     super.initState();
   }
 
-  Modes _currentMode = Modes.Add;
+  Modes _currentMode = Modes.Gravity;
 
   Modes get mode => _currentMode;
+
+  int get currentLength => _modes.length;
 
   void addMode() {
     if (_modes.length >= _allModes.length) return;
@@ -51,7 +54,38 @@ class ModeFabState extends State<ModeFab> {
       int index = _modes.length;
       _modes.add(_allModes[index]);
     });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Popup(tab: _buildPopupTab(context)),
+    );
   }
+
+  Widget _buildPopupTab(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: EdgeInsets.all(32.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            "You've just unlocked a new mode!",
+            style: textTheme.subtitle,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 12.0),
+          Container(
+            width: 150,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Image.asset("assets/gifs/tutorial_1.gif"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //TODO: Move the addMode logic from the rootNode to here
 
   @override
   Widget build(BuildContext context) {

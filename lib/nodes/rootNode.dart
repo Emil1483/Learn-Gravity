@@ -10,6 +10,7 @@ import '../ui_elements/mode_fab.dart';
 class RootNode extends NodeWithSize {
   Modes mode = Modes.Nothing;
   GlobalKey<ModeFabState> _modeFabKey;
+  Function onTapped;
 
   final double _pointsSpread = 30;
   final double _addPointDensity = 15;
@@ -27,7 +28,7 @@ class RootNode extends NodeWithSize {
   bool _tickToastTimer = false;
   double _avgFps = 0;
   int _fpsSeen = 0;
-  Function onTapped;
+  List<Modes> _modesDone = [];
 
   //TODO: Make a tutorial for when the user unlocks the app
 
@@ -151,6 +152,21 @@ class RootNode extends NodeWithSize {
     }
   }
 
+  void _completeMode(Modes mode) async {
+    if (!_modesDone.contains(mode)) {
+      _modesDone.add(mode);
+      if (_modesDone.length >= _modeFabKey.currentState.currentLength) {
+        await Future.delayed(
+          Duration(seconds: 3),
+        ).then(
+          (_) {
+            _modeFabKey.currentState.addMode();
+          },
+        );
+      }
+    }
+  }
+
   @override
   SpriteBox get spriteBox => SpriteBox(this);
 
@@ -176,6 +192,7 @@ class RootNode extends NodeWithSize {
 
     mode = _modeFabKey.currentState.mode;
 
+    if (mode != Modes.Nothing) _completeMode(mode);
     switch (mode) {
       case Modes.Nothing:
         break;

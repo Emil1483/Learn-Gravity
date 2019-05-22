@@ -8,7 +8,7 @@ import '../ui_elements/grav_slider.dart';
 import '../routes/info_route.dart';
 import '../routes/spritewidget_content.dart';
 import '../inheritedWidgets/inheritedRootNode.dart';
-import '../ui_elements/tutorial_dialog.dart';
+import '../ui_elements/popup.dart';
 
 class BackdropPage extends StatefulWidget {
   @override
@@ -52,9 +52,11 @@ class _BackdropPageState extends State<BackdropPage>
   void _getUnlocked() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool unlocked = prefs.getBool("unlocked");
-    setState(() {
-      if (unlocked != null) _unlocked = unlocked;
-    });
+    if (unlocked != null) {
+      setState(() {
+        _unlocked = unlocked;
+      });
+    }
   }
 
   void unlock() async {
@@ -99,7 +101,7 @@ class _BackdropPageState extends State<BackdropPage>
   void _startTutorial() {
     showDialog(
       context: context,
-      builder: (BuildContext context) => TutorialDialog(),
+      builder: (BuildContext context) => Popup(),
     );
   }
 
