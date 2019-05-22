@@ -5,6 +5,7 @@ import 'package:spritewidget/spritewidget.dart';
 
 class Point extends Node {
   final Size parentSize;
+  final bool blackHole;
 
   final double _padding = 55;
   final double _minSize = 5;
@@ -37,6 +38,7 @@ class Point extends Node {
     Offset pos,
     Offset vel,
     double mass,
+    this.blackHole = false,
     bool negative = false,
   }) {
     assert(parentSize != null);
@@ -56,10 +58,16 @@ class Point extends Node {
       );
     }
 
-    _color = random.nextDouble() > _amountOfBlue
-        ? Colors.white
-        : Color.fromARGB(
-            255, 0, 255 - (random.nextDouble() * _colorVariety).round(), 255);
+    _maxSpeedSq = _maxSpeed * _maxSpeed;
+
+    if (!blackHole) {
+      _color = random.nextDouble() > _amountOfBlue
+          ? Colors.white
+          : Color.fromARGB(
+              255, 0, 255 - (random.nextDouble() * _colorVariety).round(), 255);
+    } else {
+      _color = Colors.grey;
+    }
 
     if (mass != null) {
       _mass = mass;
@@ -69,8 +77,6 @@ class Point extends Node {
     if (negative) {
       _mass = -_mass.abs();
     }
-
-    _maxSpeedSq = _maxSpeed * _maxSpeed;
   }
 
   get isDead => _deathTimer >= _timeBeforeDeath;
@@ -95,7 +101,8 @@ class Point extends Node {
   }
 
   get radius {
-    return _mass.abs();
+    if (blackHole) return 10.0;
+    return math.sqrt(_mass.abs()) * 3.5;
   }
 
   get mass {
@@ -219,7 +226,7 @@ class Point extends Node {
     paint.style = _mass > 0 ? PaintingStyle.fill : PaintingStyle.stroke;
     paint.strokeWidth = 5;
 
-    canvas.drawCircle(Offset.zero, _mass.abs() * m, paint);
+    canvas.drawCircle(Offset.zero, radius * m, paint);
 
     //paint.style = PaintingStyle.stroke;
     //paintTrail(canvas);

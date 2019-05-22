@@ -20,6 +20,7 @@ class RootNode extends NodeWithSize {
   final double _minFps = 50;
   final double _framesBeforeToast = 200;
   final double _addPointWithSpeedMult = 0.1;
+  final double _blackHoleMass = 500;
 
   double _numRecentlyKilled = 0;
   double _toastTimer = 0;
@@ -274,8 +275,13 @@ class RootNode extends NodeWithSize {
     pointer["remainder"] += remain;
   }
 
-  void _addPoint(Offset position,
-      {bool negative = false, bool addSpread = true, Offset vel}) {
+  void _addPoint(
+    Offset position, {
+    bool negative = false,
+    bool addSpread = true,
+    bool blackHole = false,
+    Offset vel,
+  }) {
     math.Random random = math.Random();
     double a = random.nextDouble() * math.pi * 2;
     double r = random.nextDouble() * _pointsSpread;
@@ -286,6 +292,8 @@ class RootNode extends NodeWithSize {
         pos: position + (addSpread ? shake : Offset.zero),
         negative: negative,
         vel: vel != null ? vel : Offset.zero,
+        blackHole: blackHole,
+        mass: blackHole ? _blackHoleMass : null,
       ),
     );
   }
@@ -349,6 +357,7 @@ class RootNode extends NodeWithSize {
           pointer["pos"],
           addSpread: false,
           vel: (pointer["startPos"] - pointer["pos"]) * _addPointWithSpeedMult,
+          blackHole: true,
         );
       }
 
