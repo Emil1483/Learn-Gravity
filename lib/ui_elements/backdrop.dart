@@ -92,8 +92,6 @@ class _BackdropPageState extends State<BackdropPage>
     bool seenSprite = prefs.getBool("seenSprite");
     if (seenSprite == null || !seenSprite) {
       prefs.setBool("seenSprite", true);
-      //TODO: Implement a tutorial
-      print("Start tutorial!");
     }
     _startTutorial(); //TODO: Move this into the if block when done implementing the tutorial!
   }

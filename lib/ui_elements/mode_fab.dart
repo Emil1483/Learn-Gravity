@@ -10,7 +10,7 @@ class ModeFab extends StatefulWidget {
 }
 
 class ModeFabState extends State<ModeFab> {
-  final List<List<dynamic>> _modes = <List>[
+  final List<List<dynamic>> _allModes = <List>[
     [
       Padding(
         padding: EdgeInsets.all(12.0),
@@ -31,9 +31,27 @@ class ModeFabState extends State<ModeFab> {
     [Icon(Icons.arrow_upward), Modes.AddWithVel],
   ];
 
+  List<List<dynamic>> _modes;
+
+  @override
+  initState() {
+    _modes = <List>[];
+    _modes.add(_allModes[0]);
+    _modes.add(_allModes[1]);
+    super.initState();
+  }
+
   Modes _currentMode = Modes.Add;
 
   Modes get mode => _currentMode;
+
+  void addMode() {
+    if (_modes.length >= _allModes.length) return;
+    setState(() {
+      int index = _modes.length;
+      _modes.add(_allModes[index]);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

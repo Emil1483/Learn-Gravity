@@ -21,15 +21,41 @@ class _TutorialDialogState extends State<TutorialDialog>
 
     List<Widget> tabs = <Widget>[
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 42.0),
-        child: Text(
-          "Congratulations! You unlocked the rest of the App!",
-          style: textTheme.title,
-          textAlign: TextAlign.center,
+        padding: EdgeInsets.only(bottom: 32.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "Congratulations!",
+              style: textTheme.title,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 12.0),
+            Text(
+              "You have now unlocked the sandbox",
+              style: textTheme.subtitle,
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
-      Center(
-        child: Text("2"),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            "Use your finger to add planets",
+            style: textTheme.subtitle,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 12.0),
+          Container(
+            width: 150,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Image.asset("assets/gifs/tutorial_1.gif"),
+            ),
+          ),
+        ],
       ),
       Center(
         child: Text("3"),
