@@ -63,23 +63,27 @@ class ModeFabState extends State<ModeFab> {
   Widget _buildPopupTab(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Center(
-      child: ListView(
+      child: Padding(
         padding: EdgeInsets.all(32.0),
-        children: <Widget>[
-          Text(
-            "You've just unlocked a new mode!",
-            style: textTheme.subtitle,
-            textAlign: TextAlign.center,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Text(
+                "You've just unlocked a new mode!",
+                style: textTheme.subtitle,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 12.0),
+              Container(
+                height: 130,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Image.asset("assets/gifs/tutorial_1.gif"),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 12.0),
-          Container(
-            height: 150,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: Image.asset("assets/gifs/tutorial_1.gif"),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
