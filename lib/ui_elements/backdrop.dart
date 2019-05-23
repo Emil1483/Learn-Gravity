@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,6 +11,8 @@ import '../routes/info_route.dart';
 import '../routes/spritewidget_content.dart';
 import '../inheritedWidgets/inheritedRootNode.dart';
 import '../ui_elements/popup.dart';
+import '../ui_elements/transitioner.dart';
+import '../ui_elements/circles.dart';
 
 class BackdropPage extends StatefulWidget {
   @override
@@ -16,7 +20,7 @@ class BackdropPage extends StatefulWidget {
 }
 
 class _BackdropPageState extends State<BackdropPage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   AnimationController _controller;
 
   bool _unlocked = false;
@@ -57,6 +61,7 @@ class _BackdropPageState extends State<BackdropPage>
         _unlocked = unlocked;
       });
     }
+    _unlocked = false; //TODO: Remove this when done!
   }
 
   void unlock() async {
@@ -99,9 +104,88 @@ class _BackdropPageState extends State<BackdropPage>
   }
 
   void _startTutorial() {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    List<Widget> tabs = <Widget>[
+      Padding(
+        padding: EdgeInsets.all(22.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "Congratulations!",
+              style: textTheme.title,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 12.0),
+            Text(
+              "You have now unlocked the sandbox",
+              style: textTheme.subtitle,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            "Use your finger to add planets",
+            style: textTheme.subtitle,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 12.0),
+          Container(
+            height: 150,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Image.asset("assets/gifs/tutorial_1.gif"),
+            ),
+          ),
+        ],
+      ),
+      Center(
+        child: Text("3"),
+      ),
+    ];
+
+    TabController tabController = TabController(
+      vsync: this,
+      length: tabs.length,
+    );
+
     showDialog(
       context: context,
-      builder: (BuildContext context) => Popup(),
+      builder: (BuildContext context) => Popup(
+            fabPressed: (BuildContext context) {
+              if (tabController.animation.value + 1 < tabController.length) {
+                int newIndex = math.min(
+                    (tabController.animation.value + 1).round(),
+                    tabController.length - 1);
+                tabController.animateTo(newIndex);
+              } else {
+                Navigator.of(context).pop();
+              }
+            },
+            fabChild: Transitioner(
+              animation: tabController.animation,
+              fromMin: (tabs.length - 2).toDouble(),
+              fromMax: (tabs.length - 1).toDouble(),
+              toMin: 0,
+              toMax: 1,
+              child1: Icon(Icons.navigate_next),
+              child2: Icon(Icons.done),
+            ),
+            child: DefaultTabController(
+              length: tabs.length,
+              child: Circles(
+                controller: tabController,
+                child: TabBarView(
+                  controller: tabController,
+                  children: tabs,
+                ),
+              ),
+            ),
+          ),
     );
   }
 

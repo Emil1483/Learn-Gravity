@@ -56,7 +56,7 @@ class ModeFabState extends State<ModeFab> {
     });
     showDialog(
       context: context,
-      builder: (BuildContext context) => Popup(tab: _buildPopupTab(context)),
+      builder: (BuildContext context) => Popup(child: _buildPopupTab(context)),
     );
   }
 
