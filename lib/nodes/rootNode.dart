@@ -192,7 +192,6 @@ class RootNode extends NodeWithSize {
 
     mode = _modeFabKey.currentState.mode;
 
-    if (mode != Modes.Nothing) _completeMode(mode);
     switch (mode) {
       case Modes.Nothing:
         break;
@@ -341,6 +340,7 @@ class RootNode extends NodeWithSize {
   @override
   bool handleEvent(SpriteBoxEvent event) {
     if (event.type == PointerDownEvent) {
+      if (mode != Modes.Nothing) _completeMode(mode);
       Map<String, dynamic> newValue = {
         "id": event.pointer,
         "pos": event.boxPosition,

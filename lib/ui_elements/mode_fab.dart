@@ -88,8 +88,6 @@ class ModeFabState extends State<ModeFab> {
     );
   }
 
-  //TODO: Move the addMode logic from the rootNode to here
-
   @override
   Widget build(BuildContext context) {
     Color selected = Theme.of(context).primaryColor;
