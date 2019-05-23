@@ -1,18 +1,20 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import './custom_fab.dart';
+import './mode_fab.dart';
+import './grav_slider.dart';
+import './popup.dart';
+import './transitioner.dart';
+import './circles.dart';
+import './popup_tab.dart';
 import '../nodes/rootNode.dart';
-import '../ui_elements/custom_fab.dart';
-import '../ui_elements/mode_fab.dart';
-import '../ui_elements/grav_slider.dart';
 import '../routes/info_route.dart';
 import '../routes/spritewidget_content.dart';
 import '../inheritedWidgets/inheritedRootNode.dart';
-import '../ui_elements/popup.dart';
-import '../ui_elements/transitioner.dart';
-import '../ui_elements/circles.dart';
 
 class BackdropPage extends StatefulWidget {
   @override
@@ -125,26 +127,21 @@ class _BackdropPageState extends State<BackdropPage>
           ],
         ),
       ),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            "Use your finger to add planets",
-            style: textTheme.subtitle,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 12.0),
-          Container(
-            height: 150,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: Image.asset("assets/gifs/tutorial_1.gif"),
-            ),
-          ),
-        ],
+      PopupTab(
+        text: "Use the slider to change the gravitational constant",
+        imgUrl: "assets/gifs/gravity_slider.gif",
       ),
-      Center(
-        child: Text("3"),
+      PopupTab(
+        text: "You can at any time get back to the previous page",
+        imgUrl: "assets/gifs/info.gif",
+      ),
+      PopupTab(
+        text: "You can at any time reset the sandbox",
+        imgUrl: "assets/gifs/reset.gif",
+      ),
+      PopupTab(
+        text: "Try the different modes!",
+        imgUrl: "assets/gifs/modes.gif",
       ),
     ];
 

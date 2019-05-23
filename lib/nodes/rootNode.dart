@@ -30,8 +30,6 @@ class RootNode extends NodeWithSize {
   int _fpsSeen = 0;
   List<Modes> _modesDone = [];
 
-  //TODO: Make a tutorial for when the user unlocks the app
-
   RootNode({@required Size size}) : super(size) {
     assert(size != null);
 
@@ -152,17 +150,11 @@ class RootNode extends NodeWithSize {
     }
   }
 
-  void _completeMode(Modes mode) async {
+  void _completeMode(Modes mode) {
     if (!_modesDone.contains(mode)) {
       _modesDone.add(mode);
       if (_modesDone.length >= _modeFabKey.currentState.currentLength) {
-        await Future.delayed(
-          Duration(seconds: 3),
-        ).then(
-          (_) {
-            _modeFabKey.currentState.addMode();
-          },
-        );
+        _modeFabKey.currentState.addDelayedMode();
       }
     }
   }

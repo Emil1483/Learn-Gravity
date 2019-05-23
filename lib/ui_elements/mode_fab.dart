@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../enums/modes.dart';
 import './popup.dart';
+import './popup_tab.dart';
 
 class ModeFab extends StatefulWidget {
   ModeFab({Key key}) : super(key: key);
@@ -48,44 +49,61 @@ class ModeFabState extends State<ModeFab> {
 
   int get currentLength => _modes.length;
 
-  void addMode() {
+  void _addMode() {
     if (_modes.length >= _allModes.length) return;
+    int index = _modes.length;
     setState(() {
-      int index = _modes.length;
       _modes.add(_allModes[index]);
     });
     showDialog(
       context: context,
-      builder: (BuildContext context) => Popup(child: _buildPopupTab(context)),
+      builder: (BuildContext context) => _buildPopup(
+            context: context,
+            mode: _modes[index][1],
+          ),
     );
   }
 
-  Widget _buildPopupTab(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(32.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Text(
-                "You've just unlocked a new mode!",
-                style: textTheme.subtitle,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 12.0),
-              Container(
-                height: 130,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12.0),
-                  child: Image.asset("assets/gifs/tutorial_1.gif"),
-                ),
-              ),
-            ],
-          ),
-        ),
+  void addDelayedMode() async {
+    await Future.delayed(
+      Duration(seconds: 5),
+    ).then(
+      (_) => _addMode(),
+    );
+  }
+
+  Widget _buildPopup({@required BuildContext context, @required Modes mode}) {
+    return Popup(
+      child: PopupTab(
+        padding: EdgeInsets.symmetric(horizontal: 52.0, vertical: 22.0),
+        text: _getTextFrom(mode),
+        imgUrl: _getImgFrom(mode),
       ),
     );
+  }
+
+  String _getImgFrom(Modes mode) {
+    switch (mode) {
+      case Modes.Add:
+        return "assets/gifs/modes_add.gif";
+      case Modes.AddWithVel:
+        return "assets/gifs/modes_black_hole.gif";
+      case Modes.Move:
+        return "assets/gifs/modes_move.gif";
+      case Modes.Negative:
+        return "assets/gifs/modes_negative.gif";
+      default:
+        return "assets/gifs/modes_add.gif";
+    }
+  }
+
+  String _getTextFrom(Modes mode) {
+    switch (mode) {
+      case Modes.Negative:
+        return "You've just unlocked a new mode! You can now add points with negative mass!";
+      default:
+        return "You've just unlocked a new mode!";
+    }
   }
 
   @override
