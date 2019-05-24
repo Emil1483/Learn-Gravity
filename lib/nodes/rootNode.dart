@@ -311,7 +311,9 @@ class RootNode extends NodeWithSize {
     print("current mode is $mode");
   }
 
-  void setModeFabKey(GlobalKey<ModeFabState> key) => _modeFabKey = key;
+  void setModeFabKey(GlobalKey<ModeFabState> key) {
+    _modeFabKey = key;
+  }
 
   void reset() {
     children.clear();

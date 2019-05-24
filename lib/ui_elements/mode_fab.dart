@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../enums/modes.dart';
@@ -14,19 +15,36 @@ class ModeFab extends StatefulWidget {
 }
 
 class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
-  final int _numStartingModes = 2;
+  int _numStartingModes = 2;
   FlutterLocalNotificationsPlugin _notifications;
   bool _isOpen = true;
 
   @override
   initState() {
-    _modes = <List>[];
-    for (int i = 0; i < _numStartingModes; i++) {
-      _modes.add(_allModes[i]);
-    }
-    _initNotification();
     super.initState();
+
+    _getStartingModes();
+
+    _initNotification();
+
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _getStartingModes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int numModes = prefs.getInt("startingModes");
+    if (numModes != null) {
+      _numStartingModes = numModes;
+      print("_numStartingModes: $_numStartingModes");
+    } else {
+      prefs.setInt("startingModes", _numStartingModes);
+    }
+    setState(() {
+      _modes = <List>[];
+      for (int i = 0; i < _numStartingModes; i++) {
+        _modes.add(_allModes[i]);
+      }
+    });
   }
 
   @override
@@ -119,12 +137,17 @@ class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
 
   int get currentLength => _modes.length;
 
-  void _addMode() {
+  void _addMode() async {
     if (_modes.length >= _allModes.length) return;
+
     int index = _modes.length;
     setState(() {
       _modes.add(_allModes[index]);
     });
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt("startingModes", _modes.length);
+
     if (_isOpen)
       _showPopup();
     else
@@ -179,6 +202,13 @@ class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     Color selected = Theme.of(context).primaryColor;
     Color notSelected = Theme.of(context).disabledColor;
+
+    if (_modes == null) {
+      return Padding(
+        padding: EdgeInsets.all(16.0),
+        child: CircularProgressIndicator(),
+      );
+    }
 
     return Column(
       children: _modes.map((List<dynamic> item) {
