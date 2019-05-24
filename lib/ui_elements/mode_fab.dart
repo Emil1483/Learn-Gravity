@@ -12,6 +12,8 @@ class ModeFab extends StatefulWidget {
 }
 
 class ModeFabState extends State<ModeFab> {
+  final int _numStartingModes = 2;
+
   static Widget _buildIcon(String path) {
     return Padding(
       padding: EdgeInsets.all(12.0),
@@ -28,13 +30,21 @@ class ModeFabState extends State<ModeFab> {
     [_buildIcon("assets/black_hole.png"), Modes.AddWithVel],
   ];
 
+  final List<Duration> _delays = [
+    Duration(seconds: 10),
+    Duration(minutes: 1),
+    Duration(minutes: 2),
+    Duration(minutes: 5),
+  ];
+
   List<List<dynamic>> _modes;
 
   @override
   initState() {
     _modes = <List>[];
-    _modes.add(_allModes[0]);
-    _modes.add(_allModes[1]);
+    for (int i = 0; i < _numStartingModes; i++) {
+      _modes.add(_allModes[i]);
+    }
     super.initState();
   }
 
@@ -60,8 +70,10 @@ class ModeFabState extends State<ModeFab> {
   }
 
   void addDelayedMode() async {
+    int delayIndex = _modes.length - _numStartingModes;
+    print("adding new mode in ${_delays[delayIndex].inMinutes} minutes and ${_delays[delayIndex].inSeconds} seconds");
     await Future.delayed(
-      Duration(seconds: 1),
+      _delays[delayIndex],
     ).then(
       (_) => _addMode(),
     );
