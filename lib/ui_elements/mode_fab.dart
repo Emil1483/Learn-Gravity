@@ -6,16 +6,21 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../enums/modes.dart';
 import './popup.dart';
 import './popup_tab.dart';
+import '../nodes/rootNode.dart';
 
 class ModeFab extends StatefulWidget {
-  ModeFab({Key key}) : super(key: key);
+  final RootNode rootNode;
+
+  ModeFab({Key key, @required this.rootNode})
+      : assert(rootNode != null),
+        super(key: key);
 
   @override
   ModeFabState createState() => ModeFabState();
 }
 
 class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
-  int _numStartingModes = 2;
+  int _numStartingModes = firstModesLength;
   FlutterLocalNotificationsPlugin _notifications;
   bool _isOpen = true;
 
@@ -32,10 +37,10 @@ class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
 
   void _getStartingModes() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    //prefs.setInt("startingModes", 2); // TODO: Remove this when done
     int numModes = prefs.getInt("startingModes");
     if (numModes != null) {
       _numStartingModes = numModes;
-      print("_numStartingModes: $_numStartingModes");
     } else {
       prefs.setInt("startingModes", _numStartingModes);
     }
@@ -45,6 +50,19 @@ class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
         _modes.add(_allModes[i]);
       }
     });
+    if (_modes.length > firstModesLength) {
+      widget.rootNode.setCompletedModes(
+        unlockedModes.take(_modes.length - 1).toList(),
+      );
+    }
+  }
+
+  List<Modes> get unlockedModes {
+    List<Modes> modes = [];
+    for (int i = 0; i < _modes.length; i++) {
+      modes.add(_modes[i][1]);
+    }
+    return modes;
   }
 
   @override
@@ -65,6 +83,10 @@ class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
       default:
         break;
     }
+  }
+
+  static int get firstModesLength {
+    return 2;
   }
 
   static Widget _buildIcon(String path) {

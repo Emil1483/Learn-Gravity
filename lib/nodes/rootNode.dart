@@ -45,6 +45,10 @@ class RootNode extends NodeWithSize {
     onTapped = f;
   }
 
+  void setCompletedModes(List<Modes> modes) {
+    _modesDone = List.from(modes);
+  }
+
   void setSize(Size size) {
     this.size = size;
     reset();

@@ -57,6 +57,8 @@ class _BackdropPageState extends State<BackdropPage>
 
   void _getUnlocked() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    //prefs.setBool("unlocked", false); //TODO: Remove this when done
+    //prefs.setBool("seenSprite", false); //TODO: Remove this when done
     bool unlocked = prefs.getBool("unlocked");
     if (unlocked != null) {
       setState(() {
@@ -199,7 +201,10 @@ class _BackdropPageState extends State<BackdropPage>
 
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
     RootNode rootNode = InheritedRootNode.of(context).rootNode;
-    ModeFab modeFab = ModeFab(key: _modeFabKey);
+    ModeFab modeFab = ModeFab(
+      key: _modeFabKey,
+      rootNode: rootNode,
+    );
 
     customFab = CustomFab(
       key: _customFabKey,
