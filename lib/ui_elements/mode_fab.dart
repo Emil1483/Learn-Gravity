@@ -12,25 +12,20 @@ class ModeFab extends StatefulWidget {
 }
 
 class ModeFabState extends State<ModeFab> {
+  static Widget _buildIcon(String path) {
+    return Padding(
+      padding: EdgeInsets.all(12.0),
+      child: Image.asset(path),
+    );
+  }
+
   final List<List<dynamic>> _allModes = <List>[
-    [
-      Padding(
-        padding: EdgeInsets.all(12.0),
-        child: Image.asset("assets/gravity_in.png"),
-      ),
-      Modes.Gravity
-    ],
-    [
-      Padding(
-        padding: EdgeInsets.all(12.0),
-        child: Image.asset("assets/gravity_out.png"),
-      ),
-      Modes.Repel
-    ],
+    [_buildIcon("assets/gravity_in.png"), Modes.Gravity],
+    [_buildIcon("assets/gravity_out.png"), Modes.Repel],
     [Icon(Icons.bubble_chart), Modes.Add],
-    [Icon(Icons.add_circle_outline), Modes.Negative],
-    [Icon(Icons.compare_arrows), Modes.Move],
-    [Icon(Icons.arrow_upward), Modes.AddWithVel],
+    [_buildIcon("assets/add_negative.png"), Modes.Negative],
+    [_buildIcon("assets/move.png"), Modes.Move],
+    [_buildIcon("assets/black_hole.png"), Modes.AddWithVel],
   ];
 
   List<List<dynamic>> _modes;
@@ -66,7 +61,7 @@ class ModeFabState extends State<ModeFab> {
 
   void addDelayedMode() async {
     await Future.delayed(
-      Duration(seconds: 5),
+      Duration(seconds: 1),
     ).then(
       (_) => _addMode(),
     );

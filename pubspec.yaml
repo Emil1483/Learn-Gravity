@@ -50,6 +50,9 @@ flutter:
     - assets/button_animation.flr
     - assets/gravity_out.png
     - assets/gravity_in.png
+    - assets/add_negative.png
+    - assets/move.png
+    - assets/black_hole.png
     - assets/formula.png
     - assets/gifs/test_gif.gif
     - assets/gifs/force_learning.gif
