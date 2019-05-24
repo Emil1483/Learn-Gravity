@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../enums/modes.dart';
 import './popup.dart';
@@ -11,8 +13,41 @@ class ModeFab extends StatefulWidget {
   ModeFabState createState() => ModeFabState();
 }
 
-class ModeFabState extends State<ModeFab> {
+class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
   final int _numStartingModes = 2;
+  FlutterLocalNotificationsPlugin _notifications;
+  bool _isOpen = true;
+
+  @override
+  initState() {
+    _modes = <List>[];
+    for (int i = 0; i < _numStartingModes; i++) {
+      _modes.add(_allModes[i]);
+    }
+    _initNotification();
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.paused:
+        _isOpen = false;
+        break;
+      case AppLifecycleState.resumed:
+        _isOpen = true;
+        break;
+      default:
+        break;
+    }
+  }
 
   static Widget _buildIcon(String path) {
     return Padding(
@@ -39,13 +74,43 @@ class ModeFabState extends State<ModeFab> {
 
   List<List<dynamic>> _modes;
 
-  @override
-  initState() {
-    _modes = <List>[];
-    for (int i = 0; i < _numStartingModes; i++) {
-      _modes.add(_allModes[i]);
-    }
-    super.initState();
+  void _initNotification() {
+    _notifications = FlutterLocalNotificationsPlugin();
+    final android = AndroidInitializationSettings("@mipmap/ic_launcher");
+    final iOS = IOSInitializationSettings();
+    final initSettings = InitializationSettings(android, iOS);
+    _notifications.initialize(
+      initSettings,
+      onSelectNotification: _onSelectNotification,
+    );
+  }
+
+  Future<dynamic> _onSelectNotification(String payload) {
+    _showPopup();
+    return Future.delayed(Duration());
+  }
+
+  void _showPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => _buildPopup(
+            context: context,
+            mode: _modes[_modes.length - 1][1],
+          ),
+    );
+  }
+
+  void _showNotification() async {
+    final android = AndroidNotificationDetails(
+        "channel id", "channel NAME", "CHANNEL DESCRIPTION");
+    final iOS = IOSNotificationDetails();
+    final platfrom = NotificationDetails(android, iOS);
+    await _notifications.show(
+      0,
+      "Congratulations!",
+      _getTextFrom(_modes[_modes.length - 1][1]),
+      platfrom,
+    );
   }
 
   Modes _currentMode = Modes.Gravity;
@@ -60,18 +125,15 @@ class ModeFabState extends State<ModeFab> {
     setState(() {
       _modes.add(_allModes[index]);
     });
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => _buildPopup(
-            context: context,
-            mode: _modes[index][1],
-          ),
-    );
+    if (_isOpen)
+      _showPopup();
+    else
+      _showNotification();
   }
 
   void addDelayedMode() async {
     int delayIndex = _modes.length - _numStartingModes;
-    print("adding new mode in ${_delays[delayIndex].inMinutes} minutes and ${_delays[delayIndex].inSeconds} seconds");
+    if (delayIndex >= _delays.length) return;
     await Future.delayed(
       _delays[delayIndex],
     ).then(

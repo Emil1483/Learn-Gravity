@@ -63,7 +63,6 @@ class _BackdropPageState extends State<BackdropPage>
         _unlocked = unlocked;
       });
     }
-    _unlocked = false; //TODO: Remove this when done!
   }
 
   void unlock() async {
@@ -101,8 +100,8 @@ class _BackdropPageState extends State<BackdropPage>
     bool seenSprite = prefs.getBool("seenSprite");
     if (seenSprite == null || !seenSprite) {
       prefs.setBool("seenSprite", true);
+      _startTutorial();
     }
-    _startTutorial(); //TODO: Move this into the if block when done implementing the tutorial!
   }
 
   void _startTutorial() {
