@@ -20,11 +20,14 @@ class _Popuptate extends State<Popup> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final double h = 250;
+    final double w = 350;
+    final double p = 32;
 
     return Center(
       child: Container(
-        height: 250,
-        width: size.width - 100,
+        height: size.height < h + p*2 ? size.height - p*2 : h,
+        width: size.width < w + p*2 ? size.width - p*2 : w,
         decoration: BoxDecoration(
           color: Theme.of(context).backgroundColor,
           borderRadius: BorderRadius.all(

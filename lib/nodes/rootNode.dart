@@ -30,8 +30,6 @@ class RootNode extends NodeWithSize {
   int _fpsSeen = 0;
   List<Modes> _modesDone = [];
 
-  //TODO: get better icons for the new modes
-
   RootNode({@required Size size}) : super(size) {
     assert(size != null);
 
