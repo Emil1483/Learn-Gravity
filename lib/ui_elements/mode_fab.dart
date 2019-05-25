@@ -37,7 +37,6 @@ class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
 
   void _getStartingModes() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //prefs.setInt("startingModes", 2); // TODO: Remove this when done
     int numModes = prefs.getInt("startingModes");
     if (numModes != null) {
       _numStartingModes = numModes;
@@ -108,8 +107,8 @@ class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
   final List<Duration> _delays = [
     Duration(seconds: 10),
     Duration(minutes: 1),
-    Duration(minutes: 2),
     Duration(minutes: 5),
+    Duration(minutes: 10),
   ];
 
   List<List<dynamic>> _modes;
