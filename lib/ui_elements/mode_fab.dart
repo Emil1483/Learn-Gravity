@@ -106,9 +106,9 @@ class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
 
   final List<Duration> _delays = [
     Duration(seconds: 10),
-    Duration(minutes: 1),
     Duration(minutes: 5),
-    Duration(minutes: 10),
+    Duration(hours: 5),
+    Duration(days: 1),
   ];
 
   List<List<dynamic>> _modes;
