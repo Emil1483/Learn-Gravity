@@ -212,6 +212,8 @@ class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
 
   String _getTextFrom(Modes mode) {
     switch (mode) {
+      case Modes.Add:
+        return "You've just unlocked a new mode! Keep playing to unlock more modes";
       case Modes.Negative:
         return "You've just unlocked a new mode! You can now add points with negative mass!";
       default:
