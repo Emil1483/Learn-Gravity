@@ -178,6 +178,7 @@ class ModeFabState extends State<ModeFab> with WidgetsBindingObserver {
   void addDelayedMode() async {
     int delayIndex = _modes.length - _numStartingModes;
     if (delayIndex >= _delays.length) return;
+    print("New mode available in: " + _delays[delayIndex].inSeconds.toString() + " seconds");
     await Future.delayed(
       _delays[delayIndex],
     ).then(

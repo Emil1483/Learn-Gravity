@@ -34,17 +34,12 @@ class _BackdropPageState extends State<BackdropPage>
   final _customFabKey = GlobalKey<CustomFabState>();
   final _modeFabKey = GlobalKey<ModeFabState>();
 
+  bool _waiting = true;
+
   @override
   void initState() {
     super.initState();
-    _controller = new AnimationController(
-      duration: const Duration(milliseconds: 100),
-      value: 1.0,
-      vsync: this,
-    );
-    _controller.addListener(() {
-      if (_controller.value == 0) _seeSprite();
-    });
+    _initController();
 
     _getUnlocked();
   }
@@ -53,6 +48,28 @@ class _BackdropPageState extends State<BackdropPage>
   void dispose() {
     super.dispose();
     _controller.dispose();
+  }
+
+  void _initController() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool lastUp = prefs.getBool("lastUp");
+    if (lastUp == null) {
+      lastUp = true;
+      prefs.setBool("lastUp", lastUp);
+    }
+
+    _controller = new AnimationController(
+      duration: const Duration(milliseconds: 100),
+      value: lastUp ? 1.0 : 0.0,
+      vsync: this,
+    );
+    _controller.addListener(() {
+      if (_controller.value == 0) _seeSprite();
+    });
+
+    setState(() {
+      _waiting = false;
+    });
   }
 
   void _getUnlocked() async {
@@ -107,10 +124,16 @@ class _BackdropPageState extends State<BackdropPage>
         status == AnimationStatus.forward;
   }
 
+  void _setPanelPrefs(bool newValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("lastUp", newValue);
+  }
+
   void _panelUp() {
     if (!isPanelVisible) {
       _controller.fling(velocity: 1.0);
       _customFabKey.currentState.down();
+      _setPanelPrefs(true);
     }
   }
 
@@ -119,6 +142,7 @@ class _BackdropPageState extends State<BackdropPage>
     if (isPanelVisible) {
       _controller.fling(velocity: -1.0);
       _customFabKey.currentState.down();
+      _setPanelPrefs(false);
     }
     return true;
   }
@@ -226,6 +250,12 @@ class _BackdropPageState extends State<BackdropPage>
   }
 
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
+    if (_waiting) {
+      return Container(
+        color: Theme.of(context).backgroundColor,
+      );
+    }
+
     RootNode rootNode = InheritedRootNode.of(context).rootNode;
     ModeFab modeFab = ModeFab(
       key: _modeFabKey,
