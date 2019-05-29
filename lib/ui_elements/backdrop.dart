@@ -59,9 +59,37 @@ class _BackdropPageState extends State<BackdropPage>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool unlocked = prefs.getBool("unlocked");
     if (unlocked != null) {
-      setState(() {
-        _unlocked = unlocked;
-      });
+      setState(() => _unlocked = unlocked);
+    }
+    if (unlocked == null || !unlocked) {
+      TextTheme textTheme = Theme.of(context).textTheme;
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => Popup(
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          "Thank you for downloading the app!",
+                          style: textTheme.title,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 16.0),
+                        Text(
+                          "To unlock the fun gravity simulator, you must first read this article and finish the quiz below",
+                          style: textTheme.subtitle,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+      );
     }
   }
 
