@@ -1,16 +1,7 @@
-# grav_sim
+# Learn Gravity
 
-A new Flutter project.
+This app is made me, a private individual, as part of my portfolio. If you are looking for a flutter developer (developer for both iOS and android), please send me an email at emil14833@gmail.com.
 
-## Getting Started
+“Learn Gravity” is a fun sandbox experience to familiarize yourself with the concept of gravity. It begins with an article explaining gravity. Then, you will answer a test-yourself quiz to unlock the sandbox.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+This app is also avalable at the google play store [here](https://play.google.com/store/apps/details?id=com.djupvik.grav_sim)
